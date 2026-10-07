@@ -1,0 +1,190 @@
+﻿{
+    "status":  "success",
+    "count":  8,
+    "data":  [
+                 {
+                     "id":  4,
+                     "venture_id":  232,
+                     "title":  "Tirupati International Airport",
+                     "group":  "AIRPORT",
+                     "distance":  "10km",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790247409_primelocation-1.png",
+                     "description":  "Tirupati International Airport is a major aviation hub providing convenient air connectivity to leading cities across India and supporting easy access to Tirupati and nearby regions.",
+                     "map_url":  null,
+                     "order_index":  1,
+                     "is_active":  true,
+                     "created_at":  "2026-09-24T05:59:44.000000Z",
+                     "updated_at":  "2026-09-24T10:56:49.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790247409_primelocation-1.png",
+                     "venture":  {
+                                     "id":  232,
+                                     "title":  "ARJUN VENTURES",
+                                     "code":  "474081",
+                                     "location":  "TIRUPATHI",
+                                     "name":  "ARJUN VENTURES"
+                                 }
+                 },
+                 {
+                     "id":  5,
+                     "venture_id":  232,
+                     "title":  "TCL",
+                     "group":  "Manufacturing Hub",
+                     "distance":  "8km",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790247422_primelocation-2.png",
+                     "description":  "TCL is a major industrial and manufacturing facility in the Sri City region, contributing to local employment, economic growth, and industrial development.",
+                     "map_url":  null,
+                     "order_index":  2,
+                     "is_active":  true,
+                     "created_at":  "2026-09-24T06:05:21.000000Z",
+                     "updated_at":  "2026-09-24T10:57:02.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790247422_primelocation-2.png",
+                     "venture":  {
+                                     "id":  232,
+                                     "title":  "ARJUN VENTURES",
+                                     "code":  "474081",
+                                     "location":  "TIRUPATHI",
+                                     "name":  "ARJUN VENTURES"
+                                 }
+                 },
+                 {
+                     "id":  6,
+                     "venture_id":  232,
+                     "title":  "Srikalahasti Temple",
+                     "group":  "Famous Temple Town",
+                     "distance":  "15km",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790247438_primelocation-3.png",
+                     "description":  "Srikalahasti Temple is a renowned ancient Hindu temple dedicated to Lord Shiva, celebrated for its spiritual significance, historic architecture, and association with the sacred Vayu Lingam.",
+                     "map_url":  null,
+                     "order_index":  3,
+                     "is_active":  true,
+                     "created_at":  "2026-09-24T06:08:51.000000Z",
+                     "updated_at":  "2026-09-24T10:57:18.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790247438_primelocation-3.png",
+                     "venture":  {
+                                     "id":  232,
+                                     "title":  "ARJUN VENTURES",
+                                     "code":  "474081",
+                                     "location":  "TIRUPATHI",
+                                     "name":  "ARJUN VENTURES"
+                                 }
+                 },
+                 {
+                     "id":  7,
+                     "venture_id":  232,
+                     "title":  "Yerpedu",
+                     "group":  "Town",
+                     "distance":  "5km",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790247455_primelocation-4.png",
+                     "description":  "Yerpedu is a developing town near Tirupati, known for its strategic location, good road connectivity, nearby industries, educational institutions, and growing residential potential.",
+                     "map_url":  null,
+                     "order_index":  4,
+                     "is_active":  true,
+                     "created_at":  "2026-09-24T06:12:15.000000Z",
+                     "updated_at":  "2026-09-24T10:57:35.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790247455_primelocation-4.png",
+                     "venture":  {
+                                     "id":  232,
+                                     "title":  "ARJUN VENTURES",
+                                     "code":  "474081",
+                                     "location":  "TIRUPATHI",
+                                     "name":  "ARJUN VENTURES"
+                                 }
+                 },
+                 {
+                     "id":  8,
+                     "venture_id":  238,
+                     "title":  "BMR Industries",
+                     "group":  "Manufacturing Hub",
+                     "distance":  "2KM",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790597363_ramsainagarimg-1.png",
+                     "description":  "BMR Industries is a leading vertically integrated aquaculture and seafood company specializing in shrimp farming, hatcheries, feed manufacturing, processing, and exports.",
+                     "map_url":  null,
+                     "order_index":  5,
+                     "is_active":  true,
+                     "created_at":  "2026-09-28T12:09:23.000000Z",
+                     "updated_at":  "2026-09-28T12:10:40.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790597363_ramsainagarimg-1.png",
+                     "venture":  {
+                                     "id":  238,
+                                     "title":  "SRI RAMA SAI NAGAR PHASE-1",
+                                     "code":  "625740",
+                                     "location":  "KAVALI",
+                                     "name":  "SRI RAMA SAI NAGAR PHASE-1"
+                                 }
+                 },
+                 {
+                     "id":  9,
+                     "venture_id":  238,
+                     "title":  "Greenfield Airport",
+                     "group":  "AIRPORT",
+                     "distance":  "4km",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790597420_ramsainagarimg-2.png",
+                     "description":  "Greenfield Airport is a modern airport developed from scratch on previously undeveloped land, designed to improve regional connectivity and support future economic growth.",
+                     "map_url":  null,
+                     "order_index":  6,
+                     "is_active":  true,
+                     "created_at":  "2026-09-28T12:10:20.000000Z",
+                     "updated_at":  "2026-09-28T12:10:20.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790597420_ramsainagarimg-2.png",
+                     "venture":  {
+                                     "id":  238,
+                                     "title":  "SRI RAMA SAI NAGAR PHASE-1",
+                                     "code":  "625740",
+                                     "location":  "KAVALI",
+                                     "name":  "SRI RAMA SAI NAGAR PHASE-1"
+                                 }
+                 },
+                 {
+                     "id":  10,
+                     "venture_id":  238,
+                     "title":  "RSR Engineering College",
+                     "group":  "college",
+                     "distance":  "3KM",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790597509_ramsainagarimg-_3.png",
+                     "description":  "RSR Engineering College is a reputed engineering institution near Kavali, Andhra Pradesh, offering quality technical education and career-focused programs in engineering and management.",
+                     "map_url":  null,
+                     "order_index":  7,
+                     "is_active":  true,
+                     "created_at":  "2026-09-28T12:11:49.000000Z",
+                     "updated_at":  "2026-09-28T12:11:49.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790597509_ramsainagarimg-_3.png",
+                     "venture":  {
+                                     "id":  238,
+                                     "title":  "SRI RAMA SAI NAGAR PHASE-1",
+                                     "code":  "625740",
+                                     "location":  "KAVALI",
+                                     "name":  "SRI RAMA SAI NAGAR PHASE-1"
+                                 }
+                 },
+                 {
+                     "id":  11,
+                     "venture_id":  238,
+                     "title":  "Sri Prasanna Venkateswara Swamy Temple",
+                     "group":  "Famous Temple",
+                     "distance":  "2KM",
+                     "travel_time":  null,
+                     "image":  "uploads/venture_locations/1790597581_ramsainagarimg-4.png",
+                     "description":  "Sri Prasanna Venkateswara Swamy Temple is a revered Vaishnavite shrine dedicated to Lord Venkateswara, known for its divine Abhaya Hasta posture symbolizing protection and blessings to devotees.\r\nProject Location\r\nDiscover Luxury Living at its Prime Location - SRI RAMA SAI NAGAR PHASE-1",
+                     "map_url":  null,
+                     "order_index":  8,
+                     "is_active":  true,
+                     "created_at":  "2026-09-28T12:13:01.000000Z",
+                     "updated_at":  "2026-09-28T12:13:01.000000Z",
+                     "image_url":  "https://cms.slnmplapp.com/core/public/uploads/venture_locations/1790597581_ramsainagarimg-4.png",
+                     "venture":  {
+                                     "id":  238,
+                                     "title":  "SRI RAMA SAI NAGAR PHASE-1",
+                                     "code":  "625740",
+                                     "location":  "KAVALI",
+                                     "name":  "SRI RAMA SAI NAGAR PHASE-1"
+                                 }
+                 }
+             ]
+}

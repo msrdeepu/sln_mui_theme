@@ -1,0 +1,638 @@
+﻿{
+    "status":  "success",
+    "message":  "Venture page retrieved successfully",
+    "data":  {
+                 "id":  1,
+                 "venture_id":  241,
+                 "slug":  "arjun-ventures",
+                 "title":  "ARJUN VENTURES",
+                 "tagline":  "An Architectural Sanctuary at Tada Sri City Gateway",
+                 "template_id":  "theme-1",
+                 "status":  "published",
+                 "meta_title":  "ARJUN VENTURES | DTCP \u0026 RERA Approved Residential Plots",
+                 "meta_description":  "Discover fully developed residential villa plots at ARJUN VENTURES with 40 \u0026 50 ft roads, underground drainage, and immediate spot registration.",
+                 "seo":  {
+                             "canonicalUrl":  "https://slngroup.in/ventures/arjun-ventures",
+                             "focusKeywords":  [
+                                                   "Residential Villa Plots",
+                                                   "DTCP Approved Layout",
+                                                   "Sri City Real Estate",
+                                                   "Tada Plots for Sale",
+                                                   "SLN Group Ventures"
+                                               ],
+                             "hashtags":  [
+                                              "#SLNGroup",
+                                              "#SriCityPlots",
+                                              "#TadaRealEstate",
+                                              "#DTCPApproved",
+                                              "#VillaPlots"
+                                          ],
+                             "robots":  "index, follow",
+                             "ogTitle":  "ARJUN VENTURES — Luxury Plotted Community",
+                             "ogDescription":  "Master-planned residential enclave offering DTCP approved villa plots with underground utilities and 100% clear titles.",
+                             "ogImage":  "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format\u0026fit=crop\u0026w=1200\u0026h=630\u0026q=80",
+                             "ogType":  "website",
+                             "ogSiteName":  "SLN Group Official Portal",
+                             "twitterCard":  "summary_large_image",
+                             "twitterTitle":  "ARJUN VENTURES | Premium Villa Plots",
+                             "twitterDescription":  "DTCP \u0026 RERA approved residential plots at Tada Sri City Gateway with immediate spot registration.",
+                             "twitterImage":  "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format\u0026fit=crop\u0026w=1200\u0026h=600\u0026q=80",
+                             "twitterSite":  "@SLNGroupIndia",
+                             "schemaType":  "RealEstateListing"
+                         },
+                 "hero":  {
+                              "reraNumber":  "RERA-474081",
+                              "locationText":  "TIRUPATHI",
+                              "welcomeEyebrow":  "Premier Plotted Gated Community",
+                              "headline":  "ARJUN VENTURES",
+                              "subheadline":  "A master-planned residential plotted community engineered for generational wealth, immediate spot registration, and high-capital appreciation at the doorstep of Sri City SEZ.",
+                              "vimeoId":  "1224659064",
+                              "heroBannerUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunventuresbanner1_1790315999_KeoS8g.PNG",
+                              "primaryCtaLabel":  "Schedule Private Viewing",
+                              "secondaryCtaLabel":  "Investment Dossier",
+                              "salesPhone":  "+91 98480 12345"
+                          },
+                 "why_choose":  {
+                                    "sectionEyebrow":  "Investment Thesis",
+                                    "sectionTitle":  "An Unrivalled Convergence of Connectivity, Economy \u0026 Legal Security",
+                                    "sectionSubtitle":  "Every plot within SLN Highlands is vetted to institutional-grade standards, offering immediate legal possession and unmatched capital growth potential.",
+                                    "pillars":  [
+                                                    {
+                                                        "tag":  "Strategic Nexus",
+                                                        "title":  "Modern \u0026 Planned Infrastructure",
+                                                        "desc":  "ARJUN VENTURES offers thoughtfully planned residential plots with wide internal roads, proper drainage, electricity facilities, water availability, and essential infrastructure designed to provide a comfortable and convenient living environment.",
+                                                        "points":  [
+                                                                       "5 Mins to Tada Railway Junction",
+                                                                       "Direct 6-lane signal-free artery to North Chennai",
+                                                                       "Adjacent to international industrial logistics corridor"
+                                                                   ]
+                                                    },
+                                                    {
+                                                        "tag":  "Capital Appreciation",
+                                                        "title":  "Excellent Connectivity",
+                                                        "desc":  "Strategically positioned with convenient access to major roads, transportation facilities, educational institutions, healthcare centres, shopping areas, and everyday essentials, ARJUN VENTURES offers smooth connectivity and easy access to important destinations.",
+                                                        "points":  [
+                                                                       "Demonstrated 18–24% historic annual land appreciation",
+                                                                       "Expanding social infrastructure with universities \u0026 hospitals",
+                                                                       "Sustained corporate housing demand in Tada zone"
+                                                                   ]
+                                                    },
+                                                    {
+                                                        "tag":  "Legal Integrity",
+                                                        "title":  "Strong Investment Potential",
+                                                        "desc":  "With developing surroundings, improving infrastructure, and increasing residential demand, ARJUN VENTURES presents an attractive opportunity for long-term investment, offering the potential for future appreciation and value growth.",
+                                                        "points":  [
+                                                                       "Immediate spot registration upon plot allocation",
+                                                                       "Pre-approved mortgage assistance: SBI, HDFC, ICICI",
+                                                                       "Unencumbered freehold ownership title"
+                                                                   ]
+                                                    }
+                                                ],
+                                    "proofStrip":  [
+                                                       {
+                                                           "stat":  "220+",
+                                                           "label":  "Global Corporations",
+                                                           "sub":  "Within 10 KM Sri City industrial cluster"
+                                                       },
+                                                       {
+                                                           "stat":  "65,000+",
+                                                           "label":  "Executive Workforce",
+                                                           "sub":  "Active demand for plotted homes"
+                                                       },
+                                                       {
+                                                           "stat":  "100%",
+                                                           "label":  "Clear Encumbrance",
+                                                           "sub":  "Pre-approved by SBI, HDFC \u0026 ICICI"
+                                                       },
+                                                       {
+                                                           "stat":  "0 Min",
+                                                           "label":  "To NH-16 Highway",
+                                                           "sub":  "Direct signal-free highway approach"
+                                                       }
+                                                   ]
+                                },
+                 "specs":  [
+                               {
+                                   "value":  "10",
+                                   "label":  "total acres",
+                                   "sub":  "DTCP \u0026 RERA Approved"
+                               },
+                               {
+                                   "value":  "175",
+                                   "label":  "total plots",
+                                   "sub":  "Engineered for Heavy Traffic"
+                               },
+                               {
+                                   "value":  "1500",
+                                   "label":  "total average SFT",
+                                   "sub":  "East \u0026 North Facing Alignments"
+                               },
+                               {
+                                   "value":  "200",
+                                   "label":  "trees",
+                                   "sub":  "Ready for Immediate Possession"
+                               },
+                               {
+                                   "value":  "14",
+                                   "label":  "total blocks",
+                                   "sub":  "Architectural or legal certification detail"
+                               }
+                           ],
+                 "about":  {
+                               "eyebrow":  "Development Overview",
+                               "title":  "A Master-Planned Enclave Conceived for Elevated Living",
+                               "quoteText":  "Arjun Ventures is a thoughtfully planned residential open-plot venture created for families, homebuyers, and investors looking for a comfortable and promising place to build their future. The project offers well-planned plots within an organized layout, providing a suitable foundation for constructing a dream home. With a focus on peaceful surroundings, convenient living, and future development, Arjun Ventures brings together the essential elements of a desirable residential community.",
+                               "quoteAuthor":  "About Our SLN ARJUN VENTURES",
+                               "paragraphs":  [
+                                                  "Situated along the thriving Tada growth corridor, this gated community delivers custom-proportioned plots with 40 and 50 ft wide internal asphalt avenues, stormwater drainage networks, and dedicated municipal electrical sub-stations.",
+                                                  "Whether planning immediate bespoke villa construction or holding an institutional land asset for capital compounding, SLN Highlands provides the rarest luxury in real estate: absolute title certainty and immediate spot registry."
+                                              ],
+                               "checklist":  [
+                                                 "100% DTCP Approved Layout Certification",
+                                                 "Concealed Underground Stormwater Drainage",
+                                                 "Dedicated Central Water Tank \u0026 Distribution",
+                                                 "Pre-approved Mortgages: SBI, HDFC, ICICI"
+                                             ],
+                               "sitePhotoUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunaboutusimg-1_1790316341_mQQy6g.png",
+                               "sitePhotoCaption":  "Avenue Blacktopping \u0026 Boundaries Ready"
+                           },
+                 "amenities":  {
+                                   "selectedIds":  [
+                                                       1,
+                                                       2,
+                                                       3,
+                                                       4,
+                                                       5,
+                                                       6,
+                                                       7,
+                                                       8,
+                                                       9,
+                                                       10,
+                                                       11,
+                                                       12
+                                                   ],
+                                   "customList":  [
+                                                      {
+                                                          "id":  1,
+                                                          "title":  "Grand Entrance Architectural Arch",
+                                                          "category":  "Architecture",
+                                                          "desc":  "Monumental gated entrance with 24/7 security cabin and visitor access control."
+                                                      },
+                                                      {
+                                                          "id":  2,
+                                                          "title":  "40 \u0026 50 Ft Wide Asphalt Avenues",
+                                                          "category":  "Infrastructure",
+                                                          "desc":  "Heavy-load engineered internal avenues with concrete curbstones and storm gutters."
+                                                      },
+                                                      {
+                                                          "id":  3,
+                                                          "title":  "100% Concealed Underground Drainage",
+                                                          "category":  "Utilities",
+                                                          "desc":  "Sub-surface gravity stormwater drainage guaranteeing zero surface pooling."
+                                                      },
+                                                      {
+                                                          "id":  4,
+                                                          "title":  "100% Vaastu Compliant Plots",
+                                                          "category":  "Planning",
+                                                          "desc":  "Symmetrically aligned East and North facing plot orientations for harmonious living."
+                                                      },
+                                                      {
+                                                          "id":  5,
+                                                          "title":  "Peripheral Compound Wall \u0026 Security",
+                                                          "category":  "Security",
+                                                          "desc":  "Full 6-foot masonry boundary enclosing layout with CCTV monitoring."
+                                                      },
+                                                      {
+                                                          "id":  6,
+                                                          "title":  "Avenue Tree Plantations",
+                                                          "category":  "Landscape",
+                                                          "desc":  "Lush avenue trees lining boulevards creating micro-climate shade."
+                                                      }
+                                                  ]
+                               },
+                 "brochure":  {
+                                  "title":  "Download the Official Private Investment Dossier \u0026 Blueprint Kit",
+                                  "description":  "Receive the complete high-resolution cadastral survey, DTCP approval gazette, RERA compliance certificates, bank pre-approval schedules, and price matrix.",
+                                  "pdfUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/brochure/sln-arjun-ventures_1790316373_IuAvac.pdf",
+                                  "fileSizeLabel":  "16.54 MB",
+                                  "coverPreviewUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunventuresthumbnail-1_1790316386_MaZKtW.png",
+                                  "fileName":  "SLN_Arjun_Ventures.pdf"
+                              },
+                 "connectivity":  {
+                                      "eyebrow":  "Regional Geography",
+                                      "title":  "A Connected Nexus Between Urban Chennai \u0026 Sri City Hub",
+                                      "subtitle":  "Seamlessly linked by 6-lane national expressways, suburban rail transit, and proximity to essential social and commercial infrastructure.",
+                                      "transitNodes":  [
+                                                           {
+                                                               "time":  null,
+                                                               "dist":  "10 KM",
+                                                               "title":  "Tirupati International Airport",
+                                                               "desc":  "Immediate signal-free approach to the 6-lane national transit artery."
+                                                           },
+                                                           {
+                                                               "time":  null,
+                                                               "dist":  "8 KM",
+                                                               "title":  "TCL",
+                                                               "desc":  "Daily suburban EMU trains running directly to Chennai Central Station."
+                                                           },
+                                                           {
+                                                               "time":  null,
+                                                               "dist":  "15 KM",
+                                                               "title":  "Srikalahasti Temple",
+                                                               "desc":  "Home to 220+ global industrial leaders and 65,000+ engineers \u0026 executives."
+                                                           },
+                                                           {
+                                                               "time":  null,
+                                                               "dist":  "5 KM",
+                                                               "title":  "Yerpedu",
+                                                               "desc":  "World-class higher education campus and CBSE international academies."
+                                                           }
+                                                       ],
+                                      "mapEmbedUrl":  "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format\u0026fit=crop\u0026w=800\u0026q=80",
+                                      "coordinatesText":  "13.5937° N, 80.0267° E (Tada Junction)"
+                                  },
+                 "master_plan":  {
+                                     "eyebrow":  "Cadastral Master Blueprint",
+                                     "title":  "DTCP Approved Layout \u0026 Plot Architecture",
+                                     "totalPlotsCount":  "175 Total Plots",
+                                     "blueprintImageUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunventuresinteractivemap_1790316559_RcpUKC.png",
+                                     "legends":  [
+                                                     {
+                                                         "label":  "Standard Villa Plots (1,200 - 1,500 Sq.Ft)",
+                                                         "dimensions":  "30 x 40 / 30 x 50",
+                                                         "availability":  "Fast Selling",
+                                                         "color":  "#10B981"
+                                                     },
+                                                     {
+                                                         "label":  "Signature Estate Plots (1,800 - 2,400 Sq.Ft)",
+                                                         "dimensions":  "40 x 50 / 40 x 60",
+                                                         "availability":  "Limited Units",
+                                                         "color":  "#3B82F6"
+                                                     },
+                                                     {
+                                                         "label":  "Commercial Highway Plots (2,500+ Sq.Ft)",
+                                                         "dimensions":  "Direct Highway Access",
+                                                         "availability":  "High Demand",
+                                                         "color":  "#F59E0B"
+                                                     }
+                                                 ]
+                                 },
+                 "faqs":  [
+                              {
+                                  "q":  "What is Arjun Ventures?",
+                                  "a":  "Arjun Ventures is a thoughtfully planned residential open-plot venture designed for families, homebuyers, and investors. It offers well-planned plots, modern infrastructure, essential amenities, and a convenient environment for comfortable living and long-term investment."
+                              },
+                              {
+                                  "q":  "How many acres is Arjun Ventures?",
+                                  "a":  "Arjun Ventures is developed across 10 acres."
+                              },
+                              {
+                                  "q":  "Is Arjun Ventures an approved layout?",
+                                  "a":  "Yes. Arjun Ventures features an approved layout, providing a planned and organized development for prospective buyers."
+                              },
+                              {
+                                  "q":  "What road infrastructure is available in Arjun Ventures?",
+                                  "a":  "The layout includes wide internal roads, with 30 Ft and 40 Ft wide roads planned within the venture for convenient access."
+                              },
+                              {
+                                  "q":  "Is Arjun Ventures a good option for investment?",
+                                  "a":  "Arjun Ventures is positioned as an attractive long-term property investment opportunity, supported by its planned development, connectivity, residential potential, and future growth prospects."
+                              }
+                          ],
+                 "concierge":  {
+                                   "loungeTitle":  "SLN Marketing Private Limited",
+                                   "officeAddress":  "Dhanalakshmi Nagar, Avilala, Tirupati, Andhra Pradesh 517502",
+                                   "directSalesPhone":  null,
+                                   "visitingHours":  "Monday – Sunday: 8:30 AM – 6:30 PM",
+                                   "whatsappNumber":  null,
+                                   "complimentaryChauffeur":  true,
+                                   "googleMapsEmbedUrl":  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.951588364838!2d79.41377967506006!3d13.614753200451783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b0d1cb7e005%3A0x3aa225a50c016b96!2sSLN%20Developers!5e1!3m2!1sen!2sin!4v1790316907473!5m2!1sen!2sin"
+                               },
+                 "raw_data":  {
+                                  "id":  "1",
+                                  "ventureId":  241,
+                                  "ventureName":  "SLN NAGAR @ONGOLE",
+                                  "slug":  "arjun-ventures",
+                                  "title":  "ARJUN VENTURES",
+                                  "tagline":  "An Architectural Sanctuary at Tada Sri City Gateway",
+                                  "templateId":  "theme-1",
+                                  "status":  "published",
+                                  "metaTitle":  "ARJUN VENTURES | DTCP \u0026 RERA Approved Residential Plots",
+                                  "metaDescription":  "Discover fully developed residential villa plots at ARJUN VENTURES with 40 \u0026 50 ft roads, underground drainage, and immediate spot registration.",
+                                  "seo":  {
+                                              "canonicalUrl":  "https://slngroup.in/ventures/arjun-ventures",
+                                              "focusKeywords":  [
+                                                                    "Residential Villa Plots",
+                                                                    "DTCP Approved Layout",
+                                                                    "Sri City Real Estate",
+                                                                    "Tada Plots for Sale",
+                                                                    "SLN Group Ventures"
+                                                                ],
+                                              "hashtags":  [
+                                                               "#SLNGroup",
+                                                               "#SriCityPlots",
+                                                               "#TadaRealEstate",
+                                                               "#DTCPApproved",
+                                                               "#VillaPlots"
+                                                           ],
+                                              "robots":  "index, follow",
+                                              "ogTitle":  "ARJUN VENTURES — Luxury Plotted Community",
+                                              "ogDescription":  "Master-planned residential enclave offering DTCP approved villa plots with underground utilities and 100% clear titles.",
+                                              "ogImage":  "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format\u0026fit=crop\u0026w=1200\u0026h=630\u0026q=80",
+                                              "ogType":  "website",
+                                              "ogSiteName":  "SLN Group Official Portal",
+                                              "twitterCard":  "summary_large_image",
+                                              "twitterTitle":  "ARJUN VENTURES | Premium Villa Plots",
+                                              "twitterDescription":  "DTCP \u0026 RERA approved residential plots at Tada Sri City Gateway with immediate spot registration.",
+                                              "twitterImage":  "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format\u0026fit=crop\u0026w=1200\u0026h=600\u0026q=80",
+                                              "twitterSite":  "@SLNGroupIndia",
+                                              "schemaType":  "RealEstateListing"
+                                          },
+                                  "hero":  {
+                                               "reraNumber":  "RERA-474081",
+                                               "locationText":  "TIRUPATHI",
+                                               "welcomeEyebrow":  "Premier Plotted Gated Community",
+                                               "headline":  "ARJUN VENTURES",
+                                               "subheadline":  "A master-planned residential plotted community engineered for generational wealth, immediate spot registration, and high-capital appreciation at the doorstep of Sri City SEZ.",
+                                               "vimeoId":  "1224659064",
+                                               "heroBannerUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunventuresbanner1_1790315999_KeoS8g.PNG",
+                                               "primaryCtaLabel":  "Schedule Private Viewing",
+                                               "secondaryCtaLabel":  "Investment Dossier",
+                                               "salesPhone":  "+91 98480 12345"
+                                           },
+                                  "whyChoose":  {
+                                                    "sectionEyebrow":  "Investment Thesis",
+                                                    "sectionTitle":  "An Unrivalled Convergence of Connectivity, Economy \u0026 Legal Security",
+                                                    "sectionSubtitle":  "Every plot within SLN Highlands is vetted to institutional-grade standards, offering immediate legal possession and unmatched capital growth potential.",
+                                                    "pillars":  [
+                                                                    {
+                                                                        "tag":  "Strategic Nexus",
+                                                                        "title":  "Modern \u0026 Planned Infrastructure",
+                                                                        "desc":  "ARJUN VENTURES offers thoughtfully planned residential plots with wide internal roads, proper drainage, electricity facilities, water availability, and essential infrastructure designed to provide a comfortable and convenient living environment.",
+                                                                        "points":  "5 Mins to Tada Railway Junction Direct 6-lane signal-free artery to North Chennai Adjacent to international industrial logistics corridor"
+                                                                    },
+                                                                    {
+                                                                        "tag":  "Capital Appreciation",
+                                                                        "title":  "Excellent Connectivity",
+                                                                        "desc":  "Strategically positioned with convenient access to major roads, transportation facilities, educational institutions, healthcare centres, shopping areas, and everyday essentials, ARJUN VENTURES offers smooth connectivity and easy access to important destinations.",
+                                                                        "points":  "Demonstrated 18–24% historic annual land appreciation Expanding social infrastructure with universities \u0026 hospitals Sustained corporate housing demand in Tada zone"
+                                                                    },
+                                                                    {
+                                                                        "tag":  "Legal Integrity",
+                                                                        "title":  "Strong Investment Potential",
+                                                                        "desc":  "With developing surroundings, improving infrastructure, and increasing residential demand, ARJUN VENTURES presents an attractive opportunity for long-term investment, offering the potential for future appreciation and value growth.",
+                                                                        "points":  "Immediate spot registration upon plot allocation Pre-approved mortgage assistance: SBI, HDFC, ICICI Unencumbered freehold ownership title"
+                                                                    }
+                                                                ],
+                                                    "proofStrip":  [
+                                                                       {
+                                                                           "stat":  "220+",
+                                                                           "label":  "Global Corporations",
+                                                                           "sub":  "Within 10 KM Sri City industrial cluster"
+                                                                       },
+                                                                       {
+                                                                           "stat":  "65,000+",
+                                                                           "label":  "Executive Workforce",
+                                                                           "sub":  "Active demand for plotted homes"
+                                                                       },
+                                                                       {
+                                                                           "stat":  "100%",
+                                                                           "label":  "Clear Encumbrance",
+                                                                           "sub":  "Pre-approved by SBI, HDFC \u0026 ICICI"
+                                                                       },
+                                                                       {
+                                                                           "stat":  "0 Min",
+                                                                           "label":  "To NH-16 Highway",
+                                                                           "sub":  "Direct signal-free highway approach"
+                                                                       }
+                                                                   ]
+                                                },
+                                  "specs":  [
+                                                {
+                                                    "value":  "10",
+                                                    "label":  "total acres",
+                                                    "sub":  "DTCP \u0026 RERA Approved"
+                                                },
+                                                {
+                                                    "value":  "175",
+                                                    "label":  "total plots",
+                                                    "sub":  "Engineered for Heavy Traffic"
+                                                },
+                                                {
+                                                    "value":  "1500",
+                                                    "label":  "total average SFT",
+                                                    "sub":  "East \u0026 North Facing Alignments"
+                                                },
+                                                {
+                                                    "value":  "200",
+                                                    "label":  "trees",
+                                                    "sub":  "Ready for Immediate Possession"
+                                                },
+                                                {
+                                                    "value":  "14",
+                                                    "label":  "total blocks",
+                                                    "sub":  "Architectural or legal certification detail"
+                                                }
+                                            ],
+                                  "about":  {
+                                                "eyebrow":  "Development Overview",
+                                                "title":  "A Master-Planned Enclave Conceived for Elevated Living",
+                                                "quoteText":  "Arjun Ventures is a thoughtfully planned residential open-plot venture created for families, homebuyers, and investors looking for a comfortable and promising place to build their future. The project offers well-planned plots within an organized layout, providing a suitable foundation for constructing a dream home. With a focus on peaceful surroundings, convenient living, and future development, Arjun Ventures brings together the essential elements of a desirable residential community.",
+                                                "quoteAuthor":  "About Our SLN ARJUN VENTURES",
+                                                "paragraphs":  [
+                                                                   "Situated along the thriving Tada growth corridor, this gated community delivers custom-proportioned plots with 40 and 50 ft wide internal asphalt avenues, stormwater drainage networks, and dedicated municipal electrical sub-stations.",
+                                                                   "Whether planning immediate bespoke villa construction or holding an institutional land asset for capital compounding, SLN Highlands provides the rarest luxury in real estate: absolute title certainty and immediate spot registry."
+                                                               ],
+                                                "checklist":  [
+                                                                  "100% DTCP Approved Layout Certification",
+                                                                  "Concealed Underground Stormwater Drainage",
+                                                                  "Dedicated Central Water Tank \u0026 Distribution",
+                                                                  "Pre-approved Mortgages: SBI, HDFC, ICICI"
+                                                              ],
+                                                "sitePhotoUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunaboutusimg-1_1790316341_mQQy6g.png",
+                                                "sitePhotoCaption":  "Avenue Blacktopping \u0026 Boundaries Ready"
+                                            },
+                                  "amenities":  {
+                                                    "selectedIds":  [
+                                                                        1,
+                                                                        2,
+                                                                        3,
+                                                                        4,
+                                                                        5,
+                                                                        6,
+                                                                        7,
+                                                                        8,
+                                                                        9,
+                                                                        10,
+                                                                        11,
+                                                                        12
+                                                                    ],
+                                                    "customList":  [
+                                                                       {
+                                                                           "id":  1,
+                                                                           "title":  "Grand Entrance Architectural Arch",
+                                                                           "category":  "Architecture",
+                                                                           "desc":  "Monumental gated entrance with 24/7 security cabin and visitor access control."
+                                                                       },
+                                                                       {
+                                                                           "id":  2,
+                                                                           "title":  "40 \u0026 50 Ft Wide Asphalt Avenues",
+                                                                           "category":  "Infrastructure",
+                                                                           "desc":  "Heavy-load engineered internal avenues with concrete curbstones and storm gutters."
+                                                                       },
+                                                                       {
+                                                                           "id":  3,
+                                                                           "title":  "100% Concealed Underground Drainage",
+                                                                           "category":  "Utilities",
+                                                                           "desc":  "Sub-surface gravity stormwater drainage guaranteeing zero surface pooling."
+                                                                       },
+                                                                       {
+                                                                           "id":  4,
+                                                                           "title":  "100% Vaastu Compliant Plots",
+                                                                           "category":  "Planning",
+                                                                           "desc":  "Symmetrically aligned East and North facing plot orientations for harmonious living."
+                                                                       },
+                                                                       {
+                                                                           "id":  5,
+                                                                           "title":  "Peripheral Compound Wall \u0026 Security",
+                                                                           "category":  "Security",
+                                                                           "desc":  "Full 6-foot masonry boundary enclosing layout with CCTV monitoring."
+                                                                       },
+                                                                       {
+                                                                           "id":  6,
+                                                                           "title":  "Avenue Tree Plantations",
+                                                                           "category":  "Landscape",
+                                                                           "desc":  "Lush avenue trees lining boulevards creating micro-climate shade."
+                                                                       }
+                                                                   ]
+                                                },
+                                  "brochure":  {
+                                                   "title":  "Download the Official Private Investment Dossier \u0026 Blueprint Kit",
+                                                   "description":  "Receive the complete high-resolution cadastral survey, DTCP approval gazette, RERA compliance certificates, bank pre-approval schedules, and price matrix.",
+                                                   "pdfUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/brochure/sln-arjun-ventures_1790316373_IuAvac.pdf",
+                                                   "fileSizeLabel":  "16.54 MB",
+                                                   "coverPreviewUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunventuresthumbnail-1_1790316386_MaZKtW.png",
+                                                   "fileName":  "SLN_Arjun_Ventures.pdf"
+                                               },
+                                  "connectivity":  {
+                                                       "eyebrow":  "Regional Geography",
+                                                       "title":  "A Connected Nexus Between Urban Chennai \u0026 Sri City Hub",
+                                                       "subtitle":  "Seamlessly linked by 6-lane national expressways, suburban rail transit, and proximity to essential social and commercial infrastructure.",
+                                                       "transitNodes":  [
+                                                                            {
+                                                                                "time":  null,
+                                                                                "dist":  "10 KM",
+                                                                                "title":  "Tirupati International Airport",
+                                                                                "desc":  "Immediate signal-free approach to the 6-lane national transit artery."
+                                                                            },
+                                                                            {
+                                                                                "time":  null,
+                                                                                "dist":  "8 KM",
+                                                                                "title":  "TCL",
+                                                                                "desc":  "Daily suburban EMU trains running directly to Chennai Central Station."
+                                                                            },
+                                                                            {
+                                                                                "time":  null,
+                                                                                "dist":  "15 KM",
+                                                                                "title":  "Srikalahasti Temple",
+                                                                                "desc":  "Home to 220+ global industrial leaders and 65,000+ engineers \u0026 executives."
+                                                                            },
+                                                                            {
+                                                                                "time":  null,
+                                                                                "dist":  "5 KM",
+                                                                                "title":  "Yerpedu",
+                                                                                "desc":  "World-class higher education campus and CBSE international academies."
+                                                                            }
+                                                                        ],
+                                                       "mapEmbedUrl":  "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format\u0026fit=crop\u0026w=800\u0026q=80",
+                                                       "coordinatesText":  "13.5937° N, 80.0267° E (Tada Junction)"
+                                                   },
+                                  "masterPlan":  {
+                                                     "eyebrow":  "Cadastral Master Blueprint",
+                                                     "title":  "DTCP Approved Layout \u0026 Plot Architecture",
+                                                     "totalPlotsCount":  "175 Total Plots",
+                                                     "blueprintImageUrl":  "https://cms.slnmplapp.com/core/public/uploads/venture_pages/images/arjunventuresinteractivemap_1790316559_RcpUKC.png",
+                                                     "legends":  [
+                                                                     {
+                                                                         "label":  "Standard Villa Plots (1,200 - 1,500 Sq.Ft)",
+                                                                         "dimensions":  "30 x 40 / 30 x 50",
+                                                                         "availability":  "Fast Selling",
+                                                                         "color":  "#10B981"
+                                                                     },
+                                                                     {
+                                                                         "label":  "Signature Estate Plots (1,800 - 2,400 Sq.Ft)",
+                                                                         "dimensions":  "40 x 50 / 40 x 60",
+                                                                         "availability":  "Limited Units",
+                                                                         "color":  "#3B82F6"
+                                                                     },
+                                                                     {
+                                                                         "label":  "Commercial Highway Plots (2,500+ Sq.Ft)",
+                                                                         "dimensions":  "Direct Highway Access",
+                                                                         "availability":  "High Demand",
+                                                                         "color":  "#F59E0B"
+                                                                     }
+                                                                 ]
+                                                 },
+                                  "faqs":  [
+                                               {
+                                                   "q":  "What is Arjun Ventures?",
+                                                   "a":  "Arjun Ventures is a thoughtfully planned residential open-plot venture designed for families, homebuyers, and investors. It offers well-planned plots, modern infrastructure, essential amenities, and a convenient environment for comfortable living and long-term investment."
+                                               },
+                                               {
+                                                   "q":  "How many acres is Arjun Ventures?",
+                                                   "a":  "Arjun Ventures is developed across 10 acres."
+                                               },
+                                               {
+                                                   "q":  "Is Arjun Ventures an approved layout?",
+                                                   "a":  "Yes. Arjun Ventures features an approved layout, providing a planned and organized development for prospective buyers."
+                                               },
+                                               {
+                                                   "q":  "What road infrastructure is available in Arjun Ventures?",
+                                                   "a":  "The layout includes wide internal roads, with 30 Ft and 40 Ft wide roads planned within the venture for convenient access."
+                                               },
+                                               {
+                                                   "q":  "Is Arjun Ventures a good option for investment?",
+                                                   "a":  "Arjun Ventures is positioned as an attractive long-term property investment opportunity, supported by its planned development, connectivity, residential potential, and future growth prospects."
+                                               }
+                                           ],
+                                  "concierge":  {
+                                                    "loungeTitle":  "SLN Marketing Private Limited",
+                                                    "officeAddress":  "Dhanalakshmi Nagar, Avilala, Tirupati, Andhra Pradesh 517502",
+                                                    "directSalesPhone":  null,
+                                                    "visitingHours":  "Monday – Sunday: 8:30 AM – 6:30 PM",
+                                                    "whatsappNumber":  null,
+                                                    "complimentaryChauffeur":  true,
+                                                    "googleMapsEmbedUrl":  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.951588364838!2d79.41377967506006!3d13.614753200451783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b0d1cb7e005%3A0x3aa225a50c016b96!2sSLN%20Developers!5e1!3m2!1sen!2sin!4v1790316907473!5m2!1sen!2sin"
+                                                },
+                                  "chatbotConnectString":  null,
+                                  "voicebotConnectString":  null,
+                                  "colorPalette":  {
+                                                       "presetId":  "royal-navy",
+                                                       "primary":  "#0B1B3D",
+                                                       "accent":  "#C5A880",
+                                                       "accentHover":  "#AC8E64",
+                                                       "background":  "#FAF8F5",
+                                                       "cardBg":  "#FFFFFF",
+                                                       "textPrimary":  "#0B1B3D",
+                                                       "borderColor":  "#EAE4D9"
+                                                   }
+                              },
+                 "chatbot_connect_string":  null,
+                 "voicebot_connect_string":  null,
+                 "views_count":  208,
+                 "leads_count":  0,
+                 "published_at":  "2026-09-23T09:14:04.000000Z",
+                 "created_at":  "2026-09-23T09:14:04.000000Z",
+                 "updated_at":  "2026-09-28T11:24:31.000000Z",
+                 "venture":  {
+                                 "id":  241,
+                                 "title":  "SLN NAGAR @ONGOLE",
+                                 "code":  "451210",
+                                 "location":  "ONGOLE",
+                                 "name":  "SLN NAGAR @ONGOLE",
+                                 "locations":  [
+
+                                               ]
+                             }
+             }
+}
