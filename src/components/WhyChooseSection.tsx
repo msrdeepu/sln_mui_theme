@@ -6,13 +6,11 @@ import {
   Paper,
   Typography,
   Chip,
-  Stack,
   useTheme,
 } from '@mui/material';
 import ExploreIcon from '@mui/icons-material/Explore';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import type { VentureData } from '../types';
 
 interface WhyChooseSectionProps {
@@ -27,35 +25,20 @@ export default function WhyChooseSection({ venture }: WhyChooseSectionProps) {
     : [
         {
           tag: 'Strategic Nexus',
-          title: 'Tada-Sri City Growth Gateway',
-          description: 'Positioned signal-free along the NH-16 arterial expressway, placing Fortune-500 industrial hubs and express transit within minutes.',
-          points: [
-            '5 Mins to Tada Railway Junction',
-            'Direct signal-free 6-lane artery to North Chennai',
-            'Adjacent to international industrial logistics corridor',
-          ],
+          title: 'Prime Growth Corridor',
+          description: 'Positioned signal-free along major expressways, placing employment hubs and rapid transit corridors within easy access.',
           icon: 'Compass',
         },
         {
           tag: 'Capital Appreciation',
-          title: 'High-Yield Industrial Synergy',
-          description: 'Flanked by Sri City SEZ housing 220+ global conglomerates with over 65,000 corporate professionals driving relentless land appreciation.',
-          points: [
-            'Demonstrated 18–24% historic annual land appreciation',
-            'Expanding educational campuses & tertiary healthcare hubs',
-            'Sustained corporate housing rental demand',
-          ],
+          title: 'High-Yield Investment Potential',
+          description: 'Surrounded by rapidly developing commercial and residential infrastructure, driving consistent long-term land appreciation.',
           icon: 'TrendingUp',
         },
         {
           tag: 'Legal Integrity',
           title: '100% Clear Title & Spot Registry',
-          description: 'Complete statutory and legal certainty with sanctioned layout certification, verified titles, and pre-approved national bank loans.',
-          points: [
-            'Immediate spot registration upon plot allocation',
-            'Pre-approved mortgage assistance: SBI, HDFC, ICICI',
-            'Unencumbered freehold ownership deed',
-          ],
+          description: 'Complete statutory and legal certainty with approved layout certification, verified freehold deeds, and immediate registration.',
           icon: 'ShieldCheck',
         },
       ];
@@ -250,39 +233,11 @@ export default function WhyChooseSection({ venture }: WhyChooseSectionProps) {
                       color: '#64748b',
                       fontSize: '0.875rem',
                       lineHeight: 1.6,
-                      mb: 3,
                       flexGrow: 1,
                     }}
                   >
                     {pillar.description}
                   </Typography>
-
-                  {pillar.points && pillar.points.length > 0 && (
-                    <Stack
-                      spacing={1.25}
-                      sx={{
-                        pt: 2.5,
-                        borderTop: '1px solid rgba(241, 245, 249, 0.9)',
-                      }}
-                    >
-                      {pillar.points.map((pt, pIdx) => (
-                        <Box key={pIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <ChevronRightIcon sx={{ fontSize: 18, color: theme.palette.primary.main, mt: '2px', shrink: 0 }} />
-                          <Typography
-                            variant="caption"
-                            sx={{
-                              fontWeight: 600,
-                              color: '#334155',
-                              fontSize: '0.8125rem',
-                              lineHeight: 1.4,
-                            }}
-                          >
-                            {pt}
-                          </Typography>
-                        </Box>
-                      ))}
-                    </Stack>
-                  )}
                 </Box>
               </Paper>
             </Grid>
