@@ -312,9 +312,6 @@ function renderAmenitySvg(title: string, category?: string) {
 
 export default function AmenitiesSection({ venture }: AmenitiesSectionProps) {
   const sectionTitle = venture.amenitiesTitle || 'PREMIUM PLOTS WITH WORLD CLASS AMENITIES';
-  const sectionSubtitle =
-    venture.amenitiesSubtitle ||
-    'NRI Projects offers premium residential plots with 40+ world-class amenities, 70% open space, wide roads, and lush green landscaping — ensuring a perfect mix of luxury, comfort, and modern living';
 
   // Use dynamically configured venture amenities, or the 15 standard verified amenities
   const amenitiesList = useMemo<AmenityItem[]>(() => {
@@ -364,25 +361,10 @@ export default function AmenitiesSection({ venture }: AmenitiesSectionProps) {
               color: '#8B1D2C', // Deep rich crimson/burgundy tone matching client reference
               lineHeight: 1.25,
               textTransform: 'uppercase',
-              mb: 1.75,
+              mb: 0,
             }}
           >
             {sectionTitle}
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              fontFamily: 'inherit',
-              color: '#475569',
-              fontSize: { xs: '0.875rem', sm: '0.975rem' },
-              lineHeight: 1.65,
-              maxWidth: 880,
-              mx: 'auto',
-              fontWeight: 400,
-            }}
-          >
-            {sectionSubtitle}
           </Typography>
         </Box>
 

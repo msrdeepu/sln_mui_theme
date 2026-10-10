@@ -551,7 +551,7 @@ export const micrositeService = {
       amenitiesBgImage: page.amenities?.bgImageUrl || page.amenitiesBgImage || (page.raw_data?.amenities?.bgImageUrl) || '/amenities_clubhouse_bg.jpg',
       amenitiesTitle: page.amenities?.sectionTitle || page.amenitiesTitle || (page.raw_data?.amenities?.sectionTitle) || 'Premium Plots With World Class Amenities',
       amenitiesEyebrow: page.amenities?.sectionEyebrow || page.amenitiesEyebrow || (page.raw_data?.amenities?.sectionEyebrow) || 'World-Class Infrastructure',
-      amenitiesSubtitle: page.amenities?.sectionSubtitle || page.raw_data?.amenities?.sectionSubtitle || `${page.title || ventureRel.name || 'NRI Projects'} offers premium residential plots with 40+ world-class amenities, 70% open space, wide roads, and lush green landscaping — ensuring a perfect mix of luxury, comfort, and modern living`,
+      amenitiesSubtitle: page.amenities?.sectionSubtitle || page.raw_data?.amenities?.sectionSubtitle || '',
       locations: mappedLocations,
 
       brochureMockup: brochure.coverPreviewUrl || 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80',

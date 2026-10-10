@@ -3,14 +3,12 @@ import {
   Box,
   Container,
   Typography,
-  Chip,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   useTheme,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutlined';
 import type { VentureData } from '../types';
 
 interface FaqSectionProps {
@@ -47,23 +45,6 @@ export default function FaqSection({ venture }: FaqSectionProps) {
       <Container maxWidth="md">
         {/* Section Header */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Chip
-            icon={<HelpOutlineIcon sx={{ '&&': { color: theme.palette.primary.main, fontSize: 16 } }} />}
-            label="Clear Statutory Transparency"
-            size="small"
-            sx={{
-              fontFamily: 'Roboto Mono, monospace',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              mb: 2,
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-              color: theme.palette.primary.main,
-              border: `1px solid ${theme.palette.primary.light}`,
-            }}
-          />
-
           <Typography
             variant="h2"
             sx={{
@@ -74,21 +55,7 @@ export default function FaqSection({ venture }: FaqSectionProps) {
               lineHeight: 1.15,
             }}
           >
-            Frequently Answered Inquiries
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              color: '#64748b',
-              fontSize: { xs: '0.95rem', sm: '1.025rem' },
-              mt: 1.5,
-              lineHeight: 1.6,
-              maxWidth: 600,
-              mx: 'auto',
-            }}
-          >
-            Key statutory, legal, financial, and infrastructural questions answered with full clarity.
+            Frequently Asked Questions
           </Typography>
         </Box>
 

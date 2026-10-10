@@ -140,69 +140,23 @@ export default function LocationsSection({ venture }: LocationsSectionProps) {
         {/* Section Header */}
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', lg: 'row' },
-            alignItems: { lg: 'flex-end' },
-            justifyContent: 'space-between',
-            gap: 3,
-            pb: 4,
+            pb: 3,
             borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
             mb: 4,
           }}
         >
-          <Box sx={{ maxWidth: 720 }}>
-            <Chip
-              label="Prime Locations & Connectivity"
-              size="small"
-              sx={{
-                fontFamily: 'Roboto Mono, monospace',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                mb: 2,
-                bgcolor: 'rgba(255, 255, 255, 0.9)',
-                color: theme.palette.primary.main,
-                border: `1px solid ${theme.palette.primary.light}`,
-              }}
-            />
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { xs: '1.85rem', sm: '2.5rem', lg: '3rem' },
-                fontWeight: 900,
-                letterSpacing: '-0.025em',
-                color: '#0f172a',
-                lineHeight: 1.15,
-              }}
-            >
-              Prime Locations & Regional Connectivity
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: '#64748b',
-                fontSize: { xs: '0.95rem', sm: '1.025rem' },
-                mt: 1.5,
-                lineHeight: 1.6,
-              }}
-            >
-              Conveniently connected to major transit hubs, schools, hospitals, industrial corridors, and everyday destinations.
-            </Typography>
-          </Box>
-
-          <Chip
-            label={`Showing ${filteredLocations.length} of ${liveLocations.length} Locations`}
-            variant="outlined"
+          <Typography
+            variant="h2"
             sx={{
-              fontFamily: 'Roboto Mono, monospace',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              bgcolor: '#ffffff',
-              borderColor: 'rgba(203, 213, 225, 0.8)',
-              alignSelf: { xs: 'flex-start', lg: 'flex-end' },
+              fontSize: { xs: '1.85rem', sm: '2.5rem', lg: '3rem' },
+              fontWeight: 900,
+              letterSpacing: '-0.025em',
+              color: '#0f172a',
+              lineHeight: 1.15,
             }}
-          />
+          >
+            Regional Connectivity
+          </Typography>
         </Box>
 
         {/* Group Filter Tabs (Clean rectangular pills matching reference design) */}
