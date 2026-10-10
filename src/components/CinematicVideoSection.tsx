@@ -119,19 +119,12 @@ export default function CinematicVideoSection({ venture }: CinematicVideoSection
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-white/10">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-[11px] font-mono tracking-widest uppercase font-extrabold text-white">
-                4K Ultra-HD Aerial Perspective
-              </span>
-            </div>
-
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-tight text-white leading-tight">
-              Cinematic Master Tour From Above
+              {venture.droneVideoTitle || 'Cinematic Master Tour From Above'}
             </h2>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-light">
-              Experience an ultra-high-definition bird's-eye perspective capturing the sweeping 40 & 50 ft blacktop avenues, verdant open green lungs, and strategic growth corridor connectivity.
+              {venture.droneVideoSubtitle || venture.droneVideoDesc || "Experience an ultra-high-definition bird's-eye perspective capturing the sweeping 40 & 50 ft blacktop avenues, verdant open green lungs, and strategic growth corridor connectivity."}
             </p>
           </div>
 
@@ -143,7 +136,7 @@ export default function CinematicVideoSection({ venture }: CinematicVideoSection
               className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-mono font-medium text-slate-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer backdrop-blur-md"
             >
               {isMuted ? <VolumeX className="h-4 w-4 text-slate-400" /> : <Volume2 className="h-4 w-4 text-emerald-400 animate-pulse" />}
-              <span>{isMuted ? 'Ambient Audio: Off' : 'Ambient Audio: Live'}</span>
+              <span>{isMuted ? 'Unmute' : 'Mute'}</span>
             </button>
 
             <button
@@ -152,7 +145,7 @@ export default function CinematicVideoSection({ venture }: CinematicVideoSection
               className="px-4 py-2.5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-300 text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer backdrop-blur-md"
             >
               <Maximize2 className="h-4 w-4" />
-              <span>Full Cinema Theater</span>
+              <span>Full Screen</span>
             </button>
           </div>
         </div>

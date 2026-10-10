@@ -133,15 +133,10 @@ export default function InteractiveMasterPlan({
     };
   }, [isMaxView]);
 
-  // Unique Statuses & Facings
+  // Unique Statuses & Facings (All non-available plots are considered Sold)
   const availableStatuses = useMemo(() => {
-    if (!mapData?.plots) return [];
-    const set = new Set<string>();
-    mapData.plots.forEach((p) => {
-      if (p.status) set.add(p.status.trim());
-    });
-    return Array.from(set);
-  }, [mapData]);
+    return ['Available', 'Sold'];
+  }, []);
 
   const availableFacings = useMemo(() => {
     if (!mapData?.plots) return [];
@@ -160,7 +155,14 @@ export default function InteractiveMasterPlan({
         if (!plot.plot_no?.toLowerCase().includes(q)) return false;
       }
       if (selectedStatusFilter !== 'ALL') {
-        if (plot.status?.toLowerCase().trim() !== selectedStatusFilter.toLowerCase().trim()) {
+        const isPlotAvail =
+          plot.status?.toLowerCase().trim() === 'available' ||
+          plot.status?.toLowerCase().trim() === 'avail';
+        if (selectedStatusFilter === 'Available') {
+          if (!isPlotAvail) return false;
+        } else if (selectedStatusFilter === 'Sold') {
+          if (isPlotAvail) return false;
+        } else if (plot.status?.toLowerCase().trim() !== selectedStatusFilter.toLowerCase().trim()) {
           return false;
         }
       }
@@ -407,27 +409,33 @@ export default function InteractiveMasterPlan({
         </div>
 
         {/* Center: Live Stats Summary Badges (Desktop) */}
-        <div className="hidden lg:flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs shadow-xs">
-            <span className="text-slate-500 text-[11px] font-medium">Plots:</span>
-            <span className="font-bold text-slate-900">{stats.total_placed || plots.length}</span>
-            <span className="text-slate-300">|</span>
-            <span className="flex items-center gap-1 text-emerald-600 font-bold">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              {stats.available || 0} Avail
-            </span>
-            <span className="text-slate-300">|</span>
-            <span className="flex items-center gap-1 text-amber-600 font-bold">
-              <span className="h-2 w-2 rounded-full bg-amber-500" />
-              {stats.booked || 0} Booked
-            </span>
-            <span className="text-slate-300">|</span>
-            <span className="flex items-center gap-1 text-rose-600 font-bold">
-              <span className="h-2 w-2 rounded-full bg-rose-500" />
-              {stats.sold || 0} Sold
-            </span>
-          </div>
-        </div>
+        {(() => {
+          const totalPlotsCount = stats.total_placed || plots.length;
+          const availablePlotsCount = stats.available != null ? stats.available : plots.filter((p) => {
+            const s = (p.status || '').toLowerCase().trim();
+            return s === 'available' || s === 'avail';
+          }).length;
+          const soldPlotsCount = Math.max(0, totalPlotsCount - availablePlotsCount);
+
+          return (
+            <div className="hidden lg:flex items-center gap-2">
+              <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs shadow-xs">
+                <span className="text-slate-500 text-[11px] font-medium">Plots:</span>
+                <span className="font-bold text-slate-900">{totalPlotsCount}</span>
+                <span className="text-slate-300">|</span>
+                <span className="flex items-center gap-1 text-emerald-600 font-bold">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  {availablePlotsCount} Avail
+                </span>
+                <span className="text-slate-300">|</span>
+                <span className="flex items-center gap-1 text-rose-600 font-bold">
+                  <span className="h-2 w-2 rounded-full bg-rose-500" />
+                  {soldPlotsCount} Sold
+                </span>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Right Actions: Search + View Mode + Filter Toggle + Max View + Refresh */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -837,168 +845,217 @@ export default function InteractiveMasterPlan({
       </main>
 
       {/* 4. LUXURY PLOT SPECIFICATION DRAWER (2D Mode) */}
-      {viewMode === '2d' && selectedPlot && (
-        <div
-          className="fixed inset-0 z-40 flex items-end md:items-center justify-end pointer-events-none p-0 md:p-6"
-          onClick={() => setSelectedPlot(null)}
-        >
-          <div
-            className="pointer-events-auto w-full md:w-[380px] bg-white border-t md:border border-slate-200 rounded-t-3xl md:rounded-2xl shadow-2xl overflow-hidden flex flex-col text-slate-900 animate-in slide-in-from-bottom-6 md:slide-in-from-right-6 duration-300 max-h-[85vh] md:max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Drawer Header */}
-            <div className="p-4 px-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-sm text-white shadow-md"
-                  style={{ backgroundColor: selectedPlotColor }}
-                >
-                  {selectedPlot.plot_no}
+      {viewMode === '2d' && selectedPlot && (() => {
+        const isPlotAvailable = (selectedPlot.status || '').toLowerCase().trim() === 'available' || (selectedPlot.status || '').toLowerCase().trim() === 'avail';
+
+        if (!isPlotAvailable) {
+          return (
+            <div
+              className="fixed inset-0 z-40 flex items-end md:items-center justify-end pointer-events-none p-0 md:p-6"
+              onClick={() => setSelectedPlot(null)}
+            >
+              <div
+                className="pointer-events-auto w-full md:w-[320px] bg-white border-t md:border border-rose-100 rounded-t-3xl md:rounded-2xl shadow-2xl overflow-hidden flex flex-col text-slate-900 animate-in slide-in-from-bottom-6 md:slide-in-from-right-6 duration-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header */}
+                <div className="p-3.5 px-4 border-b border-rose-100 flex items-center justify-between bg-rose-50/80">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center font-extrabold text-xs text-white shadow-xs bg-rose-500">
+                      {selectedPlot.plot_no}
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold tracking-tight">Plot #{selectedPlot.plot_no}</h3>
+                      <p className="text-[10px] text-slate-500 font-medium">
+                        {selectedPlot.facing || 'East'} Facing
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold border bg-rose-100/70 border-rose-300 text-rose-600">
+                      Sold
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPlot(null)}
+                      className="w-7 h-7 rounded-full bg-slate-200/70 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-colors"
+                      title="Close"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-bold tracking-tight">Plot #{selectedPlot.plot_no}</h3>
-                  <p className="text-xs text-slate-500 font-medium">
-                    {selectedPlot.facing || 'East'} Facing • Premium Residential Unit
-                  </p>
+
+                {/* Message Body */}
+                <div className="p-5 pb-6 text-center space-y-2.5">
+                  <div className="mx-auto w-11 h-11 rounded-full bg-rose-50 border border-rose-200 text-rose-500 flex items-center justify-center shadow-xs">
+                    <span className="material-symbols-outlined text-2xl">lock</span>
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-base text-slate-900 tracking-tight">
+                      Oh,... its sold out
+                    </h4>
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed mt-1">
+                      This plot is already acquired and no longer available.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div
+            className="fixed inset-0 z-40 flex items-end md:items-center justify-end pointer-events-none p-0 md:p-6"
+            onClick={() => setSelectedPlot(null)}
+          >
+            <div
+              className="pointer-events-auto w-full md:w-[380px] bg-white border-t md:border border-slate-200 rounded-t-3xl md:rounded-2xl shadow-2xl overflow-hidden flex flex-col text-slate-900 animate-in slide-in-from-bottom-6 md:slide-in-from-right-6 duration-300 max-h-[85vh] md:max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Drawer Header */}
+              <div className="p-4 px-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-sm text-white shadow-md"
+                    style={{ backgroundColor: selectedPlotColor }}
+                  >
+                    {selectedPlot.plot_no}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold tracking-tight">Plot #{selectedPlot.plot_no}</h3>
+                    <p className="text-xs text-slate-500 font-medium">
+                      {selectedPlot.facing || 'East'} Facing • Premium Residential Unit
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPlot(null)}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-colors"
+                    title="Close"
+                  >
+                    ✕
+                  </button>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              {/* Specifications Body */}
+              <div className="p-5 space-y-4 overflow-y-auto">
+                {/* Status Pill & Badge */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span
+                    className="px-3 py-1 rounded-full text-xs font-bold tracking-wide border uppercase"
+                    style={{
+                      backgroundColor: `${selectedPlotColor}15`,
+                      borderColor: selectedPlotColor,
+                      color: selectedPlotColor,
+                    }}
+                  >
+                    {selectedPlot.status}
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-600">
+                    Approved Layout
+                  </span>
+                </div>
+
+                {/* 2x2 Specifications Grid */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                    Plot Architecture & Dimensions
+                  </span>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
+                      <span className="text-[10px] text-slate-500 uppercase font-semibold block">Dimensions</span>
+                      <span className="text-sm font-bold text-slate-900">
+                        {plotDetailsState?.dimensions || selectedPlot.dimensions || '30 × 40 ft'}
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
+                      <span className="text-[10px] text-slate-500 uppercase font-semibold block">Area Sq.Yards</span>
+                      <span className="text-sm font-bold text-slate-900">
+                        {plotDetailsState?.srq_yards || plotDetailsState?.sq_yards || selectedPlot.sq_yards || (selectedPlot as any).srq_yards ? `${plotDetailsState?.srq_yards || plotDetailsState?.sq_yards || selectedPlot.sq_yards || (selectedPlot as any).srq_yards} sq.yd` : '133.3 sq.yd'}
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
+                      <span className="text-[10px] text-slate-500 uppercase font-semibold block">Sft Cost</span>
+                      <span className="text-sm font-bold text-slate-900">
+                        {plotDetailsState?.sft_cost || (plotDetailsState as any)?.cost_per_sft || selectedPlot.sft_cost
+                          ? formatINR(Number(plotDetailsState?.sft_cost || (plotDetailsState as any)?.cost_per_sft || selectedPlot.sft_cost))
+                          : '₹1,650 / sft'}
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
+                      <span className="text-[10px] text-slate-500 uppercase font-semibold block">Avenue Width</span>
+                      <span className="text-sm font-bold text-slate-900">
+                        {(() => {
+                          const raw = plotDetailsState?.roadsize || selectedPlot.roadsize || '40 ft';
+                          const s = String(raw).trim();
+                          return s.toLowerCase().includes('ft') || s.toLowerCase().includes('feet') ? s : `${s} ft`;
+                        })()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pricing Breakdown Card */}
+                {selectedPlot.total_cost && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-amber-700 tracking-wider">
+                      Total Consideration
+                    </span>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xl font-bold font-serif text-slate-900">
+                        {formatINR(selectedPlot.total_cost)}
+                      </span>
+                      <span className="text-[11px] text-emerald-600 font-semibold">
+                        Spot Registry Active
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Buttons - Two options: Book Site Visit and Compare */}
+              <div className="p-4 px-5 bg-slate-50 border-t border-slate-200 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleBookSiteVisit(selectedPlot)}
+                  style={{ backgroundColor: theme?.accent || '#f97316', color: '#FFFFFF' }}
+                  className="w-full py-3 rounded-xl font-sans text-xs font-extrabold uppercase tracking-wider shadow-md hover:brightness-105 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <span className="material-symbols-outlined text-base">calendar_month</span>
+                  <span>Book Site Visit</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => handleToggleCompare(selectedPlot)}
-                  className={`h-7 px-2.5 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all border ${
+                  className={`w-full py-3 rounded-xl font-sans text-xs font-bold transition-all border cursor-pointer flex items-center justify-center gap-1.5 ${
                     comparedPlots.some((p) => p.property_id === selectedPlot.property_id)
-                      ? 'bg-indigo-600 border-indigo-500 text-white'
-                      : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200'
+                      ? 'bg-indigo-600 border-indigo-600 text-white shadow-xs'
+                      : 'bg-white hover:bg-indigo-50 hover:text-indigo-600 border-slate-200 text-slate-700'
                   }`}
-                  title={
-                    comparedPlots.some((p) => p.property_id === selectedPlot.property_id)
-                      ? 'Remove from comparison'
-                      : 'Add to comparison'
-                  }
                 >
-                  <Scale className="w-3 h-3" />
+                  <Scale className="w-3.5 h-3.5" />
                   <span>
                     {comparedPlots.some((p) => p.property_id === selectedPlot.property_id)
                       ? 'In Compare'
                       : 'Compare'}
                   </span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedPlot(null)}
-                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-colors"
-                  title="Close"
-                >
-                  ✕
-                </button>
               </div>
-            </div>
-
-            {/* Specifications Body */}
-            <div className="p-5 space-y-4 overflow-y-auto">
-              {/* Status Pill & Badge */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <span
-                  className="px-3 py-1 rounded-full text-xs font-bold tracking-wide border uppercase"
-                  style={{
-                    backgroundColor: `${selectedPlotColor}15`,
-                    borderColor: selectedPlotColor,
-                    color: selectedPlotColor,
-                  }}
-                >
-                  {selectedPlot.status}
-                </span>
-                <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-600">
-                  Approved Layout
-                </span>
-              </div>
-
-              {/* 2x2 Specifications Grid */}
-              <div className="space-y-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Plot Architecture & Dimensions
-                </span>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
-                    <span className="text-[10px] text-slate-500 uppercase font-semibold block">Dimensions</span>
-                    <span className="text-sm font-bold text-slate-900">
-                      {plotDetailsState?.dimensions || selectedPlot.dimensions || '30 × 40 ft'}
-                    </span>
-                  </div>
-
-                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
-                    <span className="text-[10px] text-slate-500 uppercase font-semibold block">Area Sq.Yards</span>
-                    <span className="text-sm font-bold text-slate-900">
-                      {plotDetailsState?.srq_yards || plotDetailsState?.sq_yards || selectedPlot.sq_yards || (selectedPlot as any).srq_yards ? `${plotDetailsState?.srq_yards || plotDetailsState?.sq_yards || selectedPlot.sq_yards || (selectedPlot as any).srq_yards} sq.yd` : '133.3 sq.yd'}
-                    </span>
-                  </div>
-
-                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
-                    <span className="text-[10px] text-slate-500 uppercase font-semibold block">Sft Cost</span>
-                    <span className="text-sm font-bold text-slate-900">
-                      {plotDetailsState?.sft_cost || (plotDetailsState as any)?.cost_per_sft || selectedPlot.sft_cost
-                        ? formatINR(Number(plotDetailsState?.sft_cost || (plotDetailsState as any)?.cost_per_sft || selectedPlot.sft_cost))
-                        : '₹1,650 / sft'}
-                    </span>
-                  </div>
-
-                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-0.5">
-                    <span className="text-[10px] text-slate-500 uppercase font-semibold block">Avenue Width</span>
-                    <span className="text-sm font-bold text-slate-900">
-                      {(() => {
-                        const raw = plotDetailsState?.roadsize || selectedPlot.roadsize || '40 ft';
-                        const s = String(raw).trim();
-                        return s.toLowerCase().includes('ft') || s.toLowerCase().includes('feet') ? s : `${s} ft`;
-                      })()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Pricing Breakdown Card */}
-              {selectedPlot.total_cost && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-amber-700 tracking-wider">
-                    Total Consideration
-                  </span>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-xl font-bold font-serif text-slate-900">
-                      {formatINR(selectedPlot.total_cost)}
-                    </span>
-                    <span className="text-[11px] text-emerald-600 font-semibold">
-                      Spot Registry Active
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="p-4 px-5 bg-slate-50 border-t border-slate-200 space-y-2">
-              <button
-                type="button"
-                onClick={() => handleBookSiteVisit(selectedPlot)}
-                style={{ backgroundColor: theme?.accent || '#059669', color: '#FFFFFF' }}
-                className="w-full py-3.5 rounded-xl font-sans text-xs font-extrabold uppercase tracking-wider shadow-lg hover:brightness-105 transition-all cursor-pointer flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-base">calendar_month</span>
-                <span>Schedule Site Visit for Plot #{selectedPlot.plot_no}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleWhatsAppShare(selectedPlot)}
-                className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-all cursor-pointer flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-base text-emerald-600">chat</span>
-                <span>Share Plot via WhatsApp</span>
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* 5. FLOATING MULTI-PLOT COMPARISON DOCK */}
       <PlotComparisonDock

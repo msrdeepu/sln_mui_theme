@@ -12,7 +12,6 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import GppGoodIcon from '@mui/icons-material/GppGood';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import type { VentureData } from '../types';
 
@@ -23,20 +22,16 @@ interface AboutSectionProps {
 export default function AboutSection({ venture }: AboutSectionProps) {
   const theme = useTheme();
 
-  const checklist = Array.isArray(venture.aboutChecklist) && venture.aboutChecklist.length > 0
-    ? venture.aboutChecklist
-    : [
-        '100% Approved Layout with immediate spot registration',
-        'Direct frontage onto primary 6-lane national transit artery',
-        'Concealed electrical lines and storm-water drainage architecture',
-        'Pre-approved mortgage sanctioning with top-tier commercial banks',
-        'Vaastu-compliant layout orientations tailored for natural ventilation',
-      ];
+  const checklist = Array.isArray(venture.aboutChecklist) ? venture.aboutChecklist : [];
+
+  // Filter out any hardcoded legacy project references like SLN Highlands
+  const cleanParagraphs = (venture.overviewText || []).filter(
+    (p) => p && !/SLN Highlands/i.test(p) && !/Highlands/i.test(p)
+  );
 
   // Helper to split title for modern 2-tone emphasis if appropriate
   const renderTitle = (titleStr: string) => {
-    const defaultTitle = 'A Master-Planned Enclave Conceived for Elevated Living';
-    const text = titleStr || defaultTitle;
+    const text = titleStr || venture.tagline || venture.title || '';
     const words = text.split(' ');
     if (words.length > 3) {
       const mainPart = words.slice(0, words.length - 2).join(' ');
@@ -108,45 +103,6 @@ export default function AboutSection({ venture }: AboutSectionProps) {
           {/* Left Column: Narrative & Overview */}
           <Grid size={{ xs: 12, lg: 7 }}>
             <Box sx={{ mb: 3 }}>
-              {/* Modern Live Pill Eyebrow */}
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 1.25,
-                  px: 2,
-                  py: 0.75,
-                  borderRadius: '9999px',
-                  bgcolor: 'rgba(241, 245, 249, 0.9)',
-                  border: '1px solid rgba(203, 213, 225, 0.7)',
-                  mb: 2.5,
-                  boxShadow: '0 2px 6px -1px rgba(0, 0, 0, 0.03)',
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: '50%',
-                    bgcolor: theme.palette.primary.main,
-                    boxShadow: `0 0 10px ${theme.palette.primary.main}`,
-                  }}
-                />
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: 'Roboto Mono, monospace',
-                    fontSize: '0.725rem',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                    color: '#334155',
-                  }}
-                >
-                  {venture.aboutEyebrow || 'Development Architecture'}
-                </Typography>
-              </Box>
-
               <Typography
                 variant="h2"
                 sx={{
@@ -163,22 +119,24 @@ export default function AboutSection({ venture }: AboutSectionProps) {
             </Box>
 
             {/* Editorial Overview Narrative */}
-            <Stack spacing={2} sx={{ mb: 4 }}>
-              {venture.overviewText.map((p, idx) => (
-                <Typography
-                  key={idx}
-                  variant="body1"
-                  sx={{
-                    color: idx === 0 ? '#334155' : '#64748b',
-                    fontSize: idx === 0 ? { xs: '1rem', sm: '1.075rem' } : { xs: '0.95rem', sm: '1rem' },
-                    fontWeight: idx === 0 ? 500 : 400,
-                    lineHeight: 1.7,
-                  }}
-                >
-                  {p}
-                </Typography>
-              ))}
-            </Stack>
+            {cleanParagraphs.length > 0 && (
+              <Stack spacing={2} sx={{ mb: 4 }}>
+                {cleanParagraphs.map((p, idx) => (
+                  <Typography
+                    key={idx}
+                    variant="body1"
+                    sx={{
+                      color: idx === 0 ? '#334155' : '#64748b',
+                      fontSize: idx === 0 ? { xs: '1rem', sm: '1.075rem' } : { xs: '0.95rem', sm: '1rem' },
+                      fontWeight: idx === 0 ? 500 : 400,
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    {p}
+                  </Typography>
+                ))}
+              </Stack>
+            )}
 
             {/* Executive Quote Card - Glassmorphic Architectural Style */}
             {venture.aboutQuote && (
@@ -390,40 +348,6 @@ export default function AboutSection({ venture }: AboutSectionProps) {
                   }}
                 />
 
-                {/* Top Floating Badge */}
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: 18,
-                    right: 18,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                    px: 1.75,
-                    py: 0.75,
-                    borderRadius: '9999px',
-                    bgcolor: 'rgba(15, 23, 42, 0.75)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    color: '#ffffff',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                  }}
-                >
-                  <GppGoodIcon sx={{ fontSize: 16, color: '#38bdf8' }} />
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontFamily: 'Roboto Mono, monospace',
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    100% Approved Layout
-                  </Typography>
-                </Box>
-
                 {/* Floating Glassmorphic Master Layout Card */}
                 <Paper
                   elevation={0}
@@ -465,37 +389,19 @@ export default function AboutSection({ venture }: AboutSectionProps) {
                   </Box>
 
                   <Box sx={{ minWidth: 0, flexGrow: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.25 }}>
-                      <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#10b981' }} />
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          fontFamily: 'Roboto Mono, monospace',
-                          fontWeight: 800,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                          color: theme.palette.primary.main,
-                          fontSize: '0.72rem',
-                          lineHeight: 1,
-                        }}
-                      >
-                        Certified Master Layout
-                      </Typography>
-                    </Box>
-
                     <Typography
                       variant="subtitle2"
                       sx={{
                         fontWeight: 800,
                         color: '#0f172a',
-                        fontSize: '0.925rem',
+                        fontSize: '0.95rem',
                         lineHeight: 1.3,
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                       }}
                     >
-                      {venture.title} • {venture.location}
+                      {venture.title} {venture.location ? `• ${venture.location}` : ''}
                     </Typography>
                   </Box>
                 </Paper>

@@ -23,6 +23,7 @@ import {
   ChevronUp,
   ChevronDown,
   Scale,
+  Lock,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import type {
@@ -459,7 +460,8 @@ export default function Venture3DCanvas({
           canvas.width = 512;
           canvas.height = 512;
           const ctx = canvas.getContext("2d");
-          const bgHex = plot.custom_color || statusColorsRef.current[plot.status] || "#10b981";
+          const isPlotAvail = (plot.status || '').toLowerCase().trim() === 'available' || (plot.status || '').toLowerCase().trim() === 'avail';
+          const bgHex = plot.custom_color || (isPlotAvail ? (statusColorsRef.current['Available'] || '#10b981') : (statusColorsRef.current['Sold'] || '#e11d48'));
 
           if (ctx) {
             ctx.imageSmoothingEnabled = true;
@@ -1477,8 +1479,11 @@ export default function Venture3DCanvas({
   };
 
   const activePlot = selectedPlot || hoveredPlotState;
+  const isAvailable = activePlot
+    ? ((activePlot.status || "").toLowerCase().trim() === "available" || (activePlot.status || "").toLowerCase().trim() === "avail")
+    : false;
   const activePlotColor = activePlot
-    ? activePlot.custom_color || statusColorsRef.current[activePlot.status] || "#10b981"
+    ? activePlot.custom_color || (isAvailable ? (statusColorsRef.current["Available"] || "#10b981") : (statusColorsRef.current["Sold"] || "#e11d48"))
     : "#10b981";
 
   const activeDetails = (selectedPlot && plotDetails) ? plotDetails : (activePlot as any);
@@ -1550,200 +1555,220 @@ export default function Venture3DCanvas({
               }
             }}
           >
-            {/* Main Speech Bubble Card */}
-            <div className="relative w-[295px] sm:w-[325px] bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden text-slate-800 animate-in fade-in zoom-in-95 duration-150">
-              {/* Pointer Arrow on Top (when flipped below) */}
-              {isFlippedBelow && (
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-slate-50 border-l border-t border-slate-200/90 rotate-45 z-10" />
-              )}
+            {isAvailable ? (
+              /* Full Detailed Box for Available Plots */
+              <div className="relative w-[295px] sm:w-[325px] bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden text-slate-800 animate-in fade-in zoom-in-95 duration-150">
+                {/* Pointer Arrow on Top (when flipped below) */}
+                {isFlippedBelow && (
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-slate-50 border-l border-t border-slate-200/90 rotate-45 z-10" />
+                )}
 
-              {/* Header */}
-              <div className="p-3 px-3.5 bg-slate-50/90 border-b border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div
-                    className="h-8.5 w-8.5 rounded-xl flex items-center justify-center font-extrabold text-white text-xs shadow-xs shrink-0"
-                    style={{
-                      backgroundColor: activePlotColor,
-                      border: "2px solid rgba(255,255,255,0.9)",
-                    }}
-                  >
-                    {activePlot.plot_no}
+                {/* Header */}
+                <div className="p-3 px-3.5 bg-slate-50/90 border-b border-slate-100 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div
+                      className="h-8.5 w-8.5 rounded-xl flex items-center justify-center font-extrabold text-white text-xs shadow-xs shrink-0"
+                      style={{
+                        backgroundColor: activePlotColor,
+                        border: "2px solid rgba(255,255,255,0.9)",
+                      }}
+                    >
+                      {activePlot.plot_no}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-extrabold text-sm text-slate-900 leading-tight truncate">
+                        Plot {activePlot.plot_no}
+                      </h3>
+                      <p className="text-[10px] text-slate-500 font-medium">
+                        {activePlot.facing || activeDetails?.facing || "WEST"} Facing
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <h3 className="font-extrabold text-sm text-slate-900 leading-tight truncate">
-                      Plot {activePlot.plot_no}
-                    </h3>
-                    <p className="text-[10px] text-slate-500 font-medium">
-                      {activePlot.facing || activeDetails?.facing || "EAST"} Facing
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className="px-2 py-0.5 rounded-full text-[10px] font-extrabold border"
-                    style={{
-                      backgroundColor: `${activePlotColor}18`,
-                      borderColor: activePlotColor,
-                      color: activePlotColor,
-                    }}
-                  >
-                    {activePlot.status}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className="px-2 py-0.5 rounded-full text-[10px] font-extrabold border bg-emerald-50 text-emerald-600 border-emerald-300"
+                    >
+                      Available
+                    </span>
 
-                  {onToggleCompare && (
                     <button
                       type="button"
-                      onClick={() => onToggleCompare(activePlot)}
-                      className={`h-6.5 px-2 rounded-full text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-all border ${
-                        comparedPlotIds.includes(activePlot.property_id)
-                          ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
-                          : "bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 border-slate-200 text-slate-700"
-                      }`}
-                      title={
-                        comparedPlotIds.includes(activePlot.property_id)
-                          ? "In comparison (Click to remove)"
-                          : "Add to comparison"
-                      }
+                      onClick={() => {
+                        isMouseOverCardRef.current = false;
+                        hoveredPlotRef.current = null;
+                        setHoveredPlotState(null);
+                        onClosePlot();
+                      }}
+                      className="h-6.5 w-6.5 rounded-full bg-slate-200/70 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-colors"
+                      title="Close Dialogue"
                     >
-                      <Scale className="h-3 w-3" />
-                      <span>{comparedPlotIds.includes(activePlot.property_id) ? "In Compare" : "Compare"}</span>
+                      <X className="h-3.5 w-3.5" />
                     </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      isMouseOverCardRef.current = false;
-                      hoveredPlotRef.current = null;
-                      setHoveredPlotState(null);
-                      onClosePlot();
-                    }}
-                    className="h-6.5 w-6.5 rounded-full bg-slate-200/70 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-colors"
-                    title="Close Dialogue"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Specifications Body */}
-              <div className="p-3 space-y-2 text-xs">
-                {detailsLoading ? (
-                  <div className="py-2.5 flex items-center justify-center gap-2 text-slate-400">
-                    <div className="h-4 w-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
-                    <span className="text-[11px]">Loading specifications...</span>
                   </div>
-                ) : (
-                  <>
-                    {/* Redzone Alert (if applicable) */}
-                    {(activeDetails?.is_redzone === 1 || activeDetails?.redzone_status) && (
-                      <div className="p-1.5 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-1.5 text-rose-700 text-[10px] font-bold">
-                        <AlertTriangle className="h-3 w-3 shrink-0" />
-                        <span>Redzone Property</span>
-                      </div>
-                    )}
+                </div>
 
-                    {/* 2x2 Specs Grid */}
-                    <div className="grid grid-cols-2 gap-1.5">
-                      <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
-                          Sq. Feet
-                        </span>
-                        <div className="text-xs font-bold text-slate-900">
-                          {sqFeet ? `${sqFeet} sq.ft` : "N/A"}
-                        </div>
-                      </div>
-
-                      <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
-                          Dimensions
-                        </span>
-                        <div className="text-xs font-bold text-slate-900 truncate">
-                          {dimensions}
-                        </div>
-                      </div>
-
-                      <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
-                          Road Size
-                        </span>
-                        <div className="text-xs font-bold text-slate-900 truncate">
-                          {roadSize}
-                        </div>
-                      </div>
-
-                      <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
-                          Sft Cost
-                        </span>
-                        <div className="text-xs font-bold text-slate-900 truncate">
-                          {sftCost || "N/A"}
-                        </div>
-                      </div>
+                {/* Specifications Body */}
+                <div className="p-3 space-y-2 text-xs">
+                  {detailsLoading ? (
+                    <div className="py-2.5 flex items-center justify-center gap-2 text-slate-400">
+                      <div className="h-4 w-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                      <span className="text-[11px]">Loading specifications...</span>
                     </div>
+                  ) : (
+                    <>
+                      {/* Redzone Alert (if applicable) */}
+                      {(activeDetails?.is_redzone === 1 || activeDetails?.redzone_status) && (
+                        <div className="p-1.5 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-1.5 text-rose-700 text-[10px] font-bold">
+                          <AlertTriangle className="h-3 w-3 shrink-0" />
+                          <span>Redzone Property</span>
+                        </div>
+                      )}
 
-                    {/* Pricing Overview */}
-                    {activePlot.total_cost && (
-                      <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-1.5 px-2.5 flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-slate-600 flex items-center gap-1">
-                          <IndianRupee className="h-3 w-3 text-emerald-600" /> Total Price:
-                        </span>
-                        <span className="text-xs font-extrabold text-emerald-700">
-                          {formatCurrency(activePlot.total_cost)}
-                        </span>
+                      {/* 2x2 Specs Grid */}
+                      <div className="grid grid-cols-2 gap-1.5">
+                        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Sq. Feet
+                          </span>
+                          <div className="text-xs font-bold text-slate-900">
+                            {sqFeet ? `${sqFeet} sq.ft` : "N/A"}
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Dimensions
+                          </span>
+                          <div className="text-xs font-bold text-slate-900 truncate">
+                            {dimensions}
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Road Size
+                          </span>
+                          <div className="text-xs font-bold text-slate-900 truncate">
+                            {roadSize}
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-1.5 px-2">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Sft Cost
+                          </span>
+                          <div className="text-xs font-bold text-slate-900 truncate">
+                            {sftCost || "N/A"}
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </>
-                )}
-              </div>
 
-              {/* Actions Footer */}
-              <div className="p-2.5 px-3 bg-slate-50 border-t border-slate-100 space-y-1.5">
-                {activePlot.status?.toLowerCase().trim() === "available" ? (
-                  <>
-                    <Button
-                      onClick={() => onBookSiteVisit(activePlot)}
-                      className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-extrabold text-xs h-8.5 rounded-xl shadow-xs tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-transform active:scale-95"
-                    >
-                      <Sparkles className="h-3 w-3" />
-                      <span>BOOK SITE VISIT</span>
-                    </Button>
+                      {/* Pricing Overview */}
+                      {activePlot.total_cost && (
+                        <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-1.5 px-2.5 flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-slate-600 flex items-center gap-1">
+                            <IndianRupee className="h-3 w-3 text-emerald-600" /> Total Price:
+                          </span>
+                          <span className="text-xs font-extrabold text-emerald-700">
+                            {formatCurrency(activePlot.total_cost)}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
 
-                    <div className="grid grid-cols-2 gap-1.5 pt-0.5">
-                      <Button
-                        size="sm"
-                        onClick={() => onBookPlot(activePlot)}
-                        className="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl text-xs h-8 font-bold shadow-xs cursor-pointer flex items-center justify-center gap-1"
-                      >
-                        <span>Book Plot</span>
-                        <ChevronRight className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => onBookSiteVisit(activePlot)}
-                        className="border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs h-8 font-semibold cursor-pointer"
-                      >
-                        Site Visit
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  onWhatsAppShare && (
+                {/* Actions Footer - Strictly two options: Book Site Visit & Compare */}
+                <div className="p-2.5 px-3 bg-slate-50 border-t border-slate-100 grid grid-cols-2 gap-2">
+                  <Button
+                    onClick={() => onBookSiteVisit(activePlot)}
+                    className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-extrabold text-[11px] sm:text-xs h-9 rounded-xl shadow-xs tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-transform active:scale-95"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    <span>Book Site Visit</span>
+                  </Button>
+
+                  {onToggleCompare && (
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onWhatsAppShare(activePlot)}
-                      className="w-full border-slate-200 hover:border-emerald-500 text-slate-700 hover:text-emerald-600 rounded-xl text-xs h-8 font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                      onClick={() => onToggleCompare(activePlot)}
+                      className={`w-full h-9 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all border ${
+                        comparedPlotIds.includes(activePlot.property_id)
+                          ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
+                          : "bg-white hover:bg-indigo-50 hover:text-indigo-600 border-slate-200 text-slate-700"
+                      }`}
                     >
-                      <Share2 className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>Share Plot Details</span>
+                      <Scale className="h-3.5 w-3.5" />
+                      <span>{comparedPlotIds.includes(activePlot.property_id) ? "In Compare" : "Compare"}</span>
                     </Button>
-                  )
-                )}
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              /* Small Box for Sold Plots */
+              <div className="relative w-[230px] sm:w-[250px] bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-rose-100 overflow-hidden text-slate-800 animate-in fade-in zoom-in-95 duration-150">
+                {/* Pointer Arrow on Top (when flipped below) */}
+                {isFlippedBelow && (
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-rose-50/90 border-l border-t border-rose-200 rotate-45 z-10" />
+                )}
+
+                {/* Header */}
+                <div className="p-2.5 px-3 bg-rose-50/80 border-b border-rose-100 flex items-center justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div
+                      className="h-7 w-7 rounded-lg flex items-center justify-center font-extrabold text-white text-[11px] shadow-xs shrink-0 bg-rose-500"
+                      style={{ border: "2px solid rgba(255,255,255,0.9)" }}
+                    >
+                      {activePlot.plot_no}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-extrabold text-xs text-slate-900 leading-tight truncate">
+                        Plot {activePlot.plot_no}
+                      </h3>
+                      <p className="text-[9px] text-slate-500 font-medium">
+                        {activePlot.facing || activeDetails?.facing || "WEST"} Facing
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold border bg-rose-100/70 border-rose-300 text-rose-600">
+                      Sold
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        isMouseOverCardRef.current = false;
+                        hoveredPlotRef.current = null;
+                        setHoveredPlotState(null);
+                        onClosePlot();
+                      }}
+                      className="h-6 w-6 rounded-full bg-slate-200/70 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-colors"
+                      title="Close"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Message Body - Small Box */}
+                <div className="p-4 pb-5 text-center space-y-2.5">
+                  <div className="mx-auto w-11 h-11 rounded-full bg-rose-50 border border-rose-200/80 text-rose-500 flex items-center justify-center shadow-xs">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-slate-900 tracking-tight">
+                      Oh,... its sold out
+                    </h4>
+                    <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-1">
+                      This plot is already acquired and no longer available.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         );
       })()}

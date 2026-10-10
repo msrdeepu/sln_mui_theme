@@ -84,22 +84,6 @@ export default function WhyChooseSection({ venture }: WhyChooseSectionProps) {
       <Container>
         {/* Section Header */}
         <Box sx={{ maxWidth: 760, mb: { xs: 6, md: 8 } }}>
-          <Chip
-            label={venture.whyChooseEyebrow || 'Strategic Investment Thesis'}
-            size="small"
-            sx={{
-              fontFamily: 'Roboto Mono, monospace',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              mb: 2,
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-              color: theme.palette.primary.main,
-              border: `1px solid ${theme.palette.primary.light}`,
-            }}
-          />
-
           <Typography
             variant="h2"
             sx={{
@@ -110,7 +94,7 @@ export default function WhyChooseSection({ venture }: WhyChooseSectionProps) {
               lineHeight: 1.15,
             }}
           >
-            {venture.whyChooseTitle || 'Engineered for Generational Growth & Title Certainty'}
+            {venture.whyChooseTitle || 'An Unrivalled Convergence of Connectivity, Economy & Legal Security'}
           </Typography>
 
           {venture.whyChooseSubtitle && (

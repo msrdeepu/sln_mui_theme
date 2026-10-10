@@ -40,6 +40,14 @@ export default function ContactFormSection({ venture }: ContactFormSectionProps)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const contact = venture.contact;
+  const siteVisitEyebrow = contact?.siteVisitEyebrow !== undefined ? contact.siteVisitEyebrow : 'SITE VISIT';
+  const siteVisitTitle = contact?.siteVisitTitle !== undefined ? contact.siteVisitTitle : 'Plan Your Site Visit';
+  const siteVisitDesc = contact?.siteVisitDesc !== undefined ? contact.siteVisitDesc : 'Visit the venture in person to explore available plots, walk through the layout, and discuss your plans with our friendly team.';
+  const formTitle = contact?.formTitle !== undefined ? contact.formTitle : 'Book a Free Site Visit';
+  const formSubtitle = contact?.formSubtitle !== undefined ? contact.formSubtitle : 'Share your details and our team will get in touch to coordinate your visit.';
+  const formButtonText = contact?.formButtonText !== undefined ? contact.formButtonText : 'Book Free Site Visit';
+
   const directionsUrl =
     venture.contact?.directionsUrl ||
     'https://maps.app.goo.gl/ccX7VBApuJTJGqKHA';
@@ -94,46 +102,52 @@ export default function ContactFormSection({ venture }: ContactFormSectionProps)
           {/* Left Column: Experience Center Information */}
           <Grid size={{ xs: 12, lg: 5 }}>
             <Box sx={{ mb: 4 }}>
-              <Chip
-                label="Site Visit"
-                size="small"
-                sx={{
-                  fontFamily: 'Roboto Mono, monospace',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  mb: 2,
-                  bgcolor: 'rgba(255, 255, 255, 0.9)',
-                  color: theme.palette.primary.main,
-                  border: `1px solid ${theme.palette.primary.light}`,
-                }}
-              />
+              {siteVisitEyebrow && (
+                <Chip
+                  label={siteVisitEyebrow}
+                  size="small"
+                  sx={{
+                    fontFamily: 'Roboto Mono, monospace',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    mb: 2,
+                    bgcolor: 'rgba(255, 255, 255, 0.9)',
+                    color: theme.palette.primary.main,
+                    border: `1px solid ${theme.palette.primary.light}`,
+                  }}
+                />
+              )}
 
-              <Typography
-                variant="h2"
-                sx={{
-                  fontSize: { xs: '1.85rem', sm: '2.5rem', lg: '3rem' },
-                  fontWeight: 900,
-                  letterSpacing: '-0.025em',
-                  color: '#0f172a',
-                  lineHeight: 1.15,
-                  mb: 2,
-                }}
-              >
-                Plan Your Site Visit
-              </Typography>
+              {siteVisitTitle && (
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontSize: { xs: '1.85rem', sm: '2.5rem', lg: '3rem' },
+                    fontWeight: 900,
+                    letterSpacing: '-0.025em',
+                    color: '#0f172a',
+                    lineHeight: 1.15,
+                    mb: 2,
+                  }}
+                >
+                  {siteVisitTitle}
+                </Typography>
+              )}
 
-              <Typography
-                variant="body1"
-                sx={{
-                  color: '#64748b',
-                  fontSize: { xs: '0.95rem', sm: '1.025rem' },
-                  lineHeight: 1.6,
-                }}
-              >
-                Visit the venture in person to explore available plots, walk through the layout, and discuss your plans with our friendly team.
-              </Typography>
+              {siteVisitDesc && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: '#64748b',
+                    fontSize: { xs: '0.95rem', sm: '1.025rem' },
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {siteVisitDesc}
+                </Typography>
+              )}
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
@@ -337,12 +351,16 @@ export default function ContactFormSection({ venture }: ContactFormSectionProps)
               ) : (
                 <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                   <Box>
-                    <Typography variant="h5" sx={{ fontWeight: 900, color: '#0f172a' }}>
-                      Book a Free Site Visit
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-                      Share your details and our team will get in touch to coordinate your visit.
-                    </Typography>
+                    {formTitle && (
+                      <Typography variant="h5" sx={{ fontWeight: 900, color: '#0f172a' }}>
+                        {formTitle}
+                      </Typography>
+                    )}
+                    {formSubtitle && (
+                      <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                        {formSubtitle}
+                      </Typography>
+                    )}
                   </Box>
 
                   <Grid container spacing={2}>

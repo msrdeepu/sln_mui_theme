@@ -1,631 +1,487 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   Container,
-  Grid,
-  Paper,
   Typography,
-  Chip,
-  useTheme,
-  alpha,
 } from '@mui/material';
-import WifiIcon from '@mui/icons-material/Wifi';
-import BoltIcon from '@mui/icons-material/Bolt';
-import PoolIcon from '@mui/icons-material/Pool';
-import WaterDropIcon from '@mui/icons-material/WaterDrop';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import CastleIcon from '@mui/icons-material/Castle';
-import SecurityIcon from '@mui/icons-material/Security';
-import ParkIcon from '@mui/icons-material/Park';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import type { VentureData, AmenityItem } from '../types';
-import { SITE_CONFIG, getLocationAssetUrl } from '../siteConfig';
 
 interface AmenitiesSectionProps {
   venture: VentureData;
 }
 
-function resolveAmenityCategory(title: string, category?: string): string {
-  if (category && category !== 'General' && category.trim()) return category;
-  const t = (title || '').toLowerCase();
-  if (t.includes('wifi') || t.includes('internet') || t.includes('fiber')) return 'Connectivity';
-  if (t.includes('power') || t.includes('electric') || t.includes('sewage') || t.includes('drain') || t.includes('pipe')) return 'Utilities';
-  if (t.includes('pool') || t.includes('swim') || t.includes('club') || t.includes('play')) return 'Recreation';
-  if (t.includes('fire') || t.includes('safety') || t.includes('security')) return 'Safety';
-  if (t.includes('arch') || t.includes('entrance') || t.includes('gate')) return 'Architecture';
-  return 'Infrastructure';
-}
+/**
+ * Rich, colorful custom vector illustrations matching the client's reference catalog.
+ * Guarantees every single real-estate amenity displays an illustrated graphic.
+ */
+function renderAmenitySvg(title: string, category?: string) {
+  const t = (title || '').toLowerCase().trim();
 
-function resolveAmenityDescription(title: string, desc?: string): string {
-  if (desc && desc.trim() && desc.trim().toLowerCase() !== (title || '').trim().toLowerCase()) {
-    return desc.trim();
+  // 1. GRAND ENTRANCE ARCH
+  if (t.includes('arch') || t.includes('entrance') || t.includes('gate')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="52" width="44" height="6" rx="2" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="1.5" />
+        <rect x="14" y="22" width="10" height="30" rx="1.5" fill="#EAB308" stroke="#CA8A04" strokeWidth="1.5" />
+        <rect x="40" y="22" width="10" height="30" rx="1.5" fill="#EAB308" stroke="#CA8A04" strokeWidth="1.5" />
+        <rect x="16" y="26" width="6" height="8" rx="1" fill="#FEF08A" />
+        <rect x="16" y="38" width="6" height="8" rx="1" fill="#FEF08A" />
+        <rect x="42" y="26" width="6" height="8" rx="1" fill="#FEF08A" />
+        <rect x="42" y="38" width="6" height="8" rx="1" fill="#FEF08A" />
+        <path d="M12 22H52V14C52 12.8954 51.1046 12 50 12H14C12.8954 12 12 12.8954 12 14V22Z" fill="#FACC15" stroke="#CA8A04" strokeWidth="1.5" />
+        <path d="M24 22V36C24 40.4183 27.5817 44 32 44C36.4183 44 40 40.4183 40 36V22" fill="#FEF9C3" stroke="#CA8A04" strokeWidth="1.5" />
+        <path d="M14 16H50" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeDasharray="3 3" />
+        <circle cx="32" cy="17" r="2.5" fill="#DC2626" />
+      </svg>
+    );
   }
-  const t = (title || '').toLowerCase();
-  if (t.includes('wifi')) return 'High-speed dedicated fiber optic connectivity integrated throughout the layout.';
-  if (t.includes('power')) return 'Dedicated underground power cabling with individual plot feeder pillars.';
-  if (t.includes('pool')) return 'Resort-style luxury community swimming pool and relaxation deck.';
-  if (t.includes('sewage') || t.includes('pipe') || t.includes('drain')) return '100% concealed underground sewage pipeline & stormwater drainage network.';
-  if (t.includes('fire')) return 'Modern certified fire prevention infrastructure and safety hydrants.';
-  if (t.includes('arch') || t.includes('entrance')) return 'Monumental architectural gateway with 24/7 guarded security access.';
-  return 'High-specification development amenity adhering to supreme master planning protocols.';
-}
 
-const DEFAULT_API_AMENITIES: AmenityItem[] = [
-  {
-    id: 1,
-    title: 'WiFi',
-    category: 'Connectivity',
-    image: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236429_wifi.png',
-    iconImage: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236429_wifi.png',
-    desc: 'High-speed dedicated fiber optic connectivity integrated throughout the layout.',
-  },
-  {
-    id: 2,
-    title: 'Power Connection',
-    category: 'Utilities',
-    image: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236449_power-connection.png',
-    iconImage: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236449_power-connection.png',
-    desc: 'Dedicated underground power cabling with individual plot feeder pillars.',
-  },
-  {
-    id: 3,
-    title: 'Swimming Pool',
-    category: 'Recreation',
-    image: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236466_swimming-pool.png',
-    iconImage: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236466_swimming-pool.png',
-    desc: 'Resort-style luxury community swimming pool and relaxation deck.',
-  },
-  {
-    id: 4,
-    title: 'Sewage pipe',
-    category: 'Utilities',
-    image: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236485_sewage-pipe.png',
-    iconImage: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236485_sewage-pipe.png',
-    desc: '100% concealed underground sewage pipeline & stormwater drainage network.',
-  },
-  {
-    id: 5,
-    title: 'Fire Safety Equipment',
-    category: 'Safety',
-    image: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236496_fire-safety-equipment.png',
-    iconImage: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236496_fire-safety-equipment.png',
-    desc: 'Modern certified fire prevention infrastructure and safety hydrants.',
-  },
-  {
-    id: 6,
-    title: 'GRAND ENTRANCE ARCH',
-    category: 'Architecture',
-    image: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236515_grand-entrance-arch.png',
-    iconImage: 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236515_grand-entrance-arch.png',
-    desc: 'Monumental architectural gateway with 24/7 guarded security access.',
-  },
-];
+  // 2. UNDERGROUND ELECTRICITY CONNECTION / POWER / LIGHT
+  if (t.includes('electric') || t.includes('power') || t.includes('bulb') || t.includes('transformer')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 6V11" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M13.6 13.6L17.2 17.2" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M50.4 13.6L46.8 17.2" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M6 32H11" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M53 32H58" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M32 14C23.1634 14 16 21.1634 16 30C16 35.8562 19.1415 40.9786 23.8344 43.7607C24.8778 44.3792 25.5 45.4975 25.5 46.7083V47H38.5V46.7083C38.5 45.4975 39.1222 44.3792 40.1656 43.7607C44.8585 40.9786 48 35.8562 48 30C48 21.1634 40.8366 14 32 14Z" fill="#FBBF24" stroke="#D97706" strokeWidth="1.5" />
+        <ellipse cx="32" cy="30" rx="9" ry="11" fill="#FEF3C7" />
+        <path d="M26 49H38V53C38 54.1046 37.1046 55 36 55H28C26.8954 55 26 54.1046 26 53V49Z" fill="#64748B" stroke="#334155" strokeWidth="1.5" />
+        <path d="M28 55H36V57C36 58.1046 35.1046 59 34 59H30C28.8954 59 28 58.1046 28 57V55Z" fill="#475569" />
+        <path d="M28 30L31 25L30 31L35 27L32 37" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  // 3. AVENUE PLANTATION / TREES / GREENERY
+  if (t.includes('plantation') || t.includes('tree') || t.includes('green') || t.includes('park') && !t.includes('children')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 50C8 46.6863 20 44 32 44C44 44 56 46.6863 56 50H8Z" fill="#22C55E" />
+        <rect x="6" y="50" width="52" height="6" rx="2" fill="#15803D" />
+        <rect x="30" y="30" width="4" height="18" rx="1" fill="#78350F" />
+        <rect x="18" y="34" width="3" height="14" rx="1" fill="#78350F" />
+        <rect x="43" y="34" width="3" height="14" rx="1" fill="#78350F" />
+        <circle cx="19.5" cy="27.5" r="9.5" fill="#16A34A" stroke="#14532D" strokeWidth="1.5" />
+        <circle cx="44.5" cy="27.5" r="9.5" fill="#16A34A" stroke="#14532D" strokeWidth="1.5" />
+        <circle cx="32" cy="22" r="13" fill="#22C55E" stroke="#15803D" strokeWidth="1.5" />
+        <circle cx="28" cy="18" r="3" fill="#86EFAC" />
+        <circle cx="36" cy="22" r="2.5" fill="#86EFAC" />
+        <path d="M12 47V53M22 47V53M32 47V53M42 47V53M52 47V53" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+        <path d="M10 49H54" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 4. STREET LIGHTS / LIGHTS
+  if (t.includes('street light') || t.includes('street') || t.includes('light')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="54" width="20" height="5" rx="1.5" fill="#64748B" stroke="#334155" strokeWidth="1.5" />
+        <path d="M30 54V22C30 14 35 9 43 9C47 9 49 11 50 14" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round" />
+        <path d="M44 14H54L52 19H46L44 14Z" fill="#F59E0B" stroke="#B45309" strokeWidth="1.5" />
+        <path d="M47 19L41 33H57L51 19" fill="#FEF08A" opacity="0.65" />
+        <circle cx="49" cy="21" r="2.5" fill="#FBBF24" />
+      </svg>
+    );
+  }
+
+  // 5. CHILDREN PARK / PLAY AREA
+  if (t.includes('children') || t.includes('play') || t.includes('kid')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 16L6 54M12 16L18 54M12 16H40M40 16L34 54M40 16L46 54" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M8 40H16M36 40H44" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+        <path d="M22 16V38M30 16V38" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
+        <rect x="18" y="38" width="16" height="4" rx="2" fill="#EF4444" />
+        <rect x="42" y="24" width="14" height="24" rx="2" fill="#06B6D4" stroke="#0891B2" strokeWidth="1.5" />
+        <path d="M42 24L49 14L56 24H42Z" fill="#F97316" />
+        <circle cx="49" cy="33" r="3" fill="#FFFFFF" />
+        <path d="M56 38L61 54H56" stroke="#EF4444" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  // 6. DUPLEX VILLA / VILLA PLOTS / RESIDENCE
+  if (t.includes('villa') || t.includes('duplex') || t.includes('house') || t.includes('home')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="12" y="26" width="40" height="30" rx="2" fill="#F8FAFC" stroke="#0F172A" strokeWidth="1.5" />
+        <path d="M9 28L32 10L55 28" stroke="#EF4444" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <polygon points="14,26 32,12 50,26" fill="#FCA5A5" />
+        <rect x="16" y="31" width="10" height="8" rx="1" fill="#38BDF8" stroke="#0F172A" strokeWidth="1.5" />
+        <rect x="38" y="31" width="10" height="8" rx="1" fill="#38BDF8" stroke="#0F172A" strokeWidth="1.5" />
+        <rect x="27" y="44" width="10" height="12" fill="#E2E8F0" stroke="#0F172A" strokeWidth="1.5" />
+        <circle cx="34" cy="50" r="1" fill="#0F172A" />
+        <rect x="16" y="45" width="7" height="9" fill="#FDE047" stroke="#0F172A" strokeWidth="1.5" />
+        <rect x="41" y="45" width="7" height="9" fill="#FDE047" stroke="#0F172A" strokeWidth="1.5" />
+        <rect x="8" y="56" width="48" height="3" fill="#64748B" />
+      </svg>
+    );
+  }
+
+  // 7. WATER SUPPLY TO EACH PLOT / WATER TAP / PIPELINE
+  if (t.includes('water supply') || t.includes('tap') || t.includes('drinking water') || (t.includes('water') && !t.includes('tank'))) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="28" width="22" height="7" rx="2" fill="#64748B" stroke="#334155" strokeWidth="1.5" />
+        <rect x="18" y="20" width="6" height="9" fill="#94A3B8" stroke="#334155" strokeWidth="1.5" />
+        <ellipse cx="21" cy="19" rx="8" ry="3.5" fill="#EF4444" stroke="#B91C1C" strokeWidth="1.5" />
+        <path d="M30 31.5H38C40.2091 31.5 42 33.2909 42 35.5V40H35V36.5C35 35.6716 34.3284 35 33.5 35H30V31.5Z" fill="#94A3B8" stroke="#334155" strokeWidth="1.5" />
+        <path d="M47 41C47 41 53 48 53 52C53 55.3137 50.3137 58 47 58C43.6863 58 41 55.3137 41 52C41 48 47 41 47 41Z" fill="#0EA5E9" stroke="#0284C7" strokeWidth="1.5" />
+        <ellipse cx="45" cy="51" rx="2" ry="3" fill="#BAE6FD" />
+        <path d="M34 45L36 50M38 43L40 48" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 8. COMPOUND WALL / BRICK WALL / PERIMETER
+  if (t.includes('compound') || t.includes('wall') || t.includes('boundary') || t.includes('perimeter')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="16" width="48" height="38" rx="2" fill="#FEF08A" stroke="#EAB308" strokeWidth="2" />
+        <line x1="8" y1="28" x2="56" y2="28" stroke="#EAB308" strokeWidth="2" />
+        <line x1="8" y1="41" x2="56" y2="41" stroke="#EAB308" strokeWidth="2" />
+        <line x1="24" y1="16" x2="24" y2="28" stroke="#EAB308" strokeWidth="2" />
+        <line x1="40" y1="16" x2="40" y2="28" stroke="#EAB308" strokeWidth="2" />
+        <line x1="16" y1="28" x2="16" y2="41" stroke="#EAB308" strokeWidth="2" />
+        <line x1="32" y1="28" x2="32" y2="41" stroke="#EAB308" strokeWidth="2" />
+        <line x1="48" y1="28" x2="48" y2="41" stroke="#EAB308" strokeWidth="2" />
+        <line x1="24" y1="41" x2="24" y2="54" stroke="#EAB308" strokeWidth="2" />
+        <line x1="40" y1="41" x2="40" y2="54" stroke="#EAB308" strokeWidth="2" />
+        <rect x="6" y="13" width="52" height="4" rx="1.5" fill="#CA8A04" />
+      </svg>
+    );
+  }
+
+  // 9. 24/7 SECURITY / CCTV / GUARD
+  if (t.includes('security') || t.includes('guard') || t.includes('cctv') || t.includes('surveillance')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="32" cy="18" rx="15" ry="5" fill="#1E3A8A" />
+        <path d="M20 18C20 18 22 10 32 10C42 10 44 18 44 18H20Z" fill="#1E40AF" />
+        <circle cx="32" cy="14" r="2.5" fill="#FACC15" />
+        <circle cx="32" cy="28" r="10" fill="#FED7AA" stroke="#EA580C" strokeWidth="1.5" />
+        <ellipse cx="28" cy="27" rx="1.5" ry="2" fill="#0F172A" />
+        <ellipse cx="36" cy="27" rx="1.5" ry="2" fill="#0F172A" />
+        <path d="M30 33C31 34 33 34 34 33" stroke="#EA580C" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M16 56C16 46 22 41 32 41C42 41 48 46 48 56" fill="#2563EB" stroke="#1D4ED8" strokeWidth="1.5" />
+        <polygon points="32,41 29,48 35,48" fill="#FACC15" />
+        <rect x="23" y="44" width="4" height="12" fill="#FEF08A" />
+        <rect x="37" y="44" width="4" height="12" fill="#FEF08A" />
+        <circle cx="39" cy="46" r="2" fill="#FACC15" />
+      </svg>
+    );
+  }
+
+  // 10. OVERHEAD WATER TANK / TANK
+  if (t.includes('overhead') || t.includes('tank') || t.includes('reservoir')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="32" cy="18" rx="14" ry="5" fill="#38BDF8" stroke="#0284C7" strokeWidth="1.5" />
+        <path d="M18 18V28C18 31 24 33 32 33C40 33 46 31 46 28V18" fill="#0EA5E9" stroke="#0284C7" strokeWidth="1.5" />
+        <ellipse cx="32" cy="28" rx="14" ry="4.5" fill="#0284C7" opacity="0.3" />
+        <line x1="21" y1="33" x2="16" y2="56" stroke="#0284C7" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="43" y1="33" x2="48" y2="56" stroke="#0284C7" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="26" y1="33" x2="24" y2="56" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" />
+        <line x1="38" y1="33" x2="40" y2="56" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" />
+        <line x1="18" y1="41" x2="46" y2="41" stroke="#0284C7" strokeWidth="1.5" />
+        <line x1="17" y1="48" x2="47" y2="48" stroke="#0284C7" strokeWidth="1.5" />
+        <rect x="14" y="55" width="36" height="3" rx="1" fill="#64748B" />
+      </svg>
+    );
+  }
+
+  // 11. UNDERGROUND DRAINAGE / DRAIN / SEWAGE
+  if (t.includes('drainage') || t.includes('under ground') || t.includes('underground') || t.includes('sewage') || t.includes('pipe')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="24" width="22" height="18" rx="2" fill="#CBD5E1" stroke="#64748B" strokeWidth="1.5" />
+        <ellipse cx="30" cy="33" rx="4" ry="9" fill="#94A3B8" stroke="#64748B" strokeWidth="1.5" />
+        <path d="M30 33C33 33 36 38 42 38C48 38 52 35 56 35V52H24V42C28 42 28 33 30 33Z" fill="#38BDF8" opacity="0.65" />
+        <path d="M30 36C35 36 38 41 44 41C50 41 53 38 58 38" stroke="#0284C7" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M26 43C31 43 35 48 42 48C48 48 52 45 56 45" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="48" cy="48" r="2" fill="#BAE6FD" />
+        <circle cx="53" cy="42" r="1.5" fill="#BAE6FD" />
+      </svg>
+    );
+  }
+
+  // 12. ENTIRE LAYOUT AS PER VASTU / VAASTU / COMPASS
+  if (t.includes('vastu') || t.includes('vaastu') || t.includes('compass') || t.includes('orientation')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="24" fill="#FFFFFF" stroke="#0F172A" strokeWidth="2.5" />
+        <circle cx="32" cy="32" r="19" stroke="#E2E8F0" strokeWidth="1.5" strokeDasharray="2 2" />
+        <polygon points="32,13 36,32 32,32 28,32" fill="#EF4444" stroke="#DC2626" strokeWidth="1" />
+        <polygon points="32,51 36,32 32,32 28,32" fill="#2563EB" stroke="#1D4ED8" strokeWidth="1" />
+        <circle cx="32" cy="32" r="3.5" fill="#0F172A" />
+        <circle cx="32" cy="32" r="1.5" fill="#FFFFFF" />
+        <text x="32" y="10" fontFamily="sans-serif" fontSize="7" fontWeight="bold" fill="#EF4444" textAnchor="middle">N</text>
+        <text x="32" y="60" fontFamily="sans-serif" fontSize="7" fontWeight="bold" fill="#2563EB" textAnchor="middle">S</text>
+        <text x="59" y="34.5" fontFamily="sans-serif" fontSize="7" fontWeight="bold" fill="#0F172A" textAnchor="middle">E</text>
+        <text x="5" y="34.5" fontFamily="sans-serif" fontSize="7" fontWeight="bold" fill="#0F172A" textAnchor="middle">W</text>
+      </svg>
+    );
+  }
+
+  // 13. CLEAR TITLE & SPOT REGISTRATION / DOCUMENT / LEGAL
+  if (t.includes('title') || t.includes('registration') || t.includes('clear') || t.includes('deed') || t.includes('certificate')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="10" width="36" height="46" rx="3" fill="#FFFFFF" stroke="#38BDF8" strokeWidth="2" />
+        <rect x="18" y="14" width="28" height="6" rx="1.5" fill="#38BDF8" />
+        <rect x="18" y="24" width="10" height="12" rx="1" fill="#FDE047" stroke="#CA8A04" strokeWidth="1" />
+        <line x1="32" y1="26" x2="44" y2="26" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round" />
+        <line x1="32" y1="32" x2="44" y2="32" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round" />
+        <line x1="18" y1="41" x2="44" y2="41" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="18" y1="46" x2="36" y2="46" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M35 52L49 32L53 36L39 56L35 56L35 52Z" fill="#FACC15" stroke="#CA8A04" strokeWidth="1" />
+        <polygon points="35,52 35,56 39,56" fill="#EF4444" />
+      </svg>
+    );
+  }
+
+  // 14. SOLAR FENCING / SOLAR / ECO PROTECTION
+  if (t.includes('solar') || t.includes('fencing') || t.includes('fence') || t.includes('eco')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="27" r="15" fill="#38BDF8" stroke="#0284C7" strokeWidth="1.5" />
+        <path d="M22 24C24 20 28 19 32 20C35 21 38 24 37 28C36 31 33 33 30 35C27 33 22 28 22 24Z" fill="#22C55E" />
+        <path d="M34 16C36 17 38 19 39 21C42 22 45 25 44 28C43 30 41 31 39 31" stroke="#22C55E" strokeWidth="2" strokeLinecap="round" />
+        <path d="M12 42C14 36 21 34 26 36L32 39L38 36C43 34 50 36 52 42C53 46 51 51 46 54L32 58L18 54C13 51 11 46 12 42Z" fill="#FBBF24" stroke="#D97706" strokeWidth="1.5" />
+        <path d="M20 48L32 54L44 48" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 15. BLACKTOP ROADS / BT ROADS / WIDE AVENUES / HIGHWAY
+  if (t.includes('road') || t.includes('avenue') || t.includes('tar') || t.includes('bt') || t.includes('highway')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="12,54 22,14 42,14 52,54" fill="#334155" stroke="#1E293B" strokeWidth="1.5" />
+        <line x1="32" y1="16" x2="32" y2="24" stroke="#FBBF24" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="32" y1="29" x2="32" y2="39" stroke="#FBBF24" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="32" y1="44" x2="32" y2="52" stroke="#FBBF24" strokeWidth="2.5" strokeLinecap="round" />
+        <polygon points="6,54 18,14 22,14 12,54" fill="#22C55E" />
+        <polygon points="52,54 42,14 46,14 58,54" fill="#22C55E" />
+      </svg>
+    );
+  }
+
+  // 16. SWIMMING POOL / POOL / CLUBHOUSE
+  if (t.includes('pool') || t.includes('swim')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="22" width="44" height="32" rx="4" fill="#38BDF8" stroke="#0284C7" strokeWidth="2" />
+        <path d="M12 32C16 30 20 34 24 32C28 30 32 34 36 32C40 30 44 34 48 32C50 31 51 32 52 32" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+        <path d="M12 42C16 40 20 44 24 42C28 40 32 44 36 42C40 40 44 44 48 42C50 41 51 42 52 42" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+        <rect x="18" y="12" width="4" height="24" rx="2" fill="#E2E8F0" stroke="#64748B" strokeWidth="1" />
+        <rect x="26" y="12" width="4" height="24" rx="2" fill="#E2E8F0" stroke="#64748B" strokeWidth="1" />
+        <line x1="20" y1="18" x2="28" y2="18" stroke="#64748B" strokeWidth="2" />
+        <line x1="20" y1="24" x2="28" y2="24" stroke="#64748B" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  // 17. CLUBHOUSE / INDOOR GAMES
+  if (t.includes('clubhouse') || t.includes('club') || t.includes('community')) {
+    return (
+      <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 26L32 10L56 26" stroke="#991B1B" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <polygon points="12,25 32,12 52,25" fill="#F87171" />
+        <rect x="14" y="26" width="36" height="28" fill="#F8FAFC" stroke="#334155" strokeWidth="1.5" />
+        <rect x="18" y="30" width="4" height="20" fill="#E2E8F0" />
+        <rect x="26" y="30" width="4" height="20" fill="#E2E8F0" />
+        <rect x="34" y="30" width="4" height="20" fill="#E2E8F0" />
+        <rect x="42" y="30" width="4" height="20" fill="#E2E8F0" />
+        <rect x="28" y="40" width="8" height="14" fill="#0F172A" />
+      </svg>
+    );
+  }
+
+  // DEFAULT / GENERAL PREMIUM AMENITY CREST
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="22" fill="#FEF08A" stroke="#EAB308" strokeWidth="2" />
+      <polygon points="32,16 36,26 47,27 39,35 41,46 32,40 23,46 25,35 17,27 28,26" fill="#F59E0B" stroke="#D97706" strokeWidth="1" />
+    </svg>
+  );
+}
 
 export default function AmenitiesSection({ venture }: AmenitiesSectionProps) {
-  const theme = useTheme();
-  const [activeCategory, setActiveCategory] = useState<string>('ALL');
-  const [amenities, setAmenities] = useState<AmenityItem[]>(() => {
+  const sectionTitle = venture.amenitiesTitle || 'PREMIUM PLOTS WITH WORLD CLASS AMENITIES';
+  const sectionSubtitle =
+    venture.amenitiesSubtitle ||
+    'NRI Projects offers premium residential plots with 40+ world-class amenities, 70% open space, wide roads, and lush green landscaping — ensuring a perfect mix of luxury, comfort, and modern living';
+
+  // Use dynamically configured venture amenities, or the 15 standard verified amenities
+  const amenitiesList = useMemo<AmenityItem[]>(() => {
     if (Array.isArray(venture.amenities) && venture.amenities.length > 0) {
-      const hasRealImages = venture.amenities.some((a) => a.image && a.image.includes('uploads/amenities'));
-      if (hasRealImages) return venture.amenities;
+      return venture.amenities;
     }
-    return DEFAULT_API_AMENITIES;
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchApiAmenities = async () => {
-      try {
-        const res = await fetch(`${SITE_CONFIG.apiBaseUrl}/cms/amenities`);
-        if (res.ok) {
-          const json = await res.json();
-          if (json && json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
-            const mapped: AmenityItem[] = json.data.map((a: any, idx: number) => {
-              const title = a.title || a.display_name || 'Amenity';
-              return {
-                id: a.id ? Number(a.id) : idx + 1,
-                title: title,
-                icon: a.icon || 'Sparkles',
-                category: resolveAmenityCategory(title, a.category),
-                desc: resolveAmenityDescription(title, a.description),
-                image: getLocationAssetUrl(a.icon_image_url || a.image_url || a.icon_image || a.image),
-                iconImage: getLocationAssetUrl(a.icon_image_url || a.icon_image),
-                color: a.color,
-                badge: a.badge,
-              };
-            });
-            if (isMounted) setAmenities(mapped);
-          }
-        }
-      } catch (err) {
-        console.warn('[AmenitiesSection] Live API fetch failed:', err);
-      }
-    };
-
-    fetchApiAmenities();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const categories = ['ALL', ...Array.from(new Set(amenities.map((a) => (a.category || 'General').toUpperCase())))];
-
-  const getAmenityImage = (amenity: any): string => {
-    if (amenity.image && typeof amenity.image === 'string' && amenity.image.trim()) {
-      return amenity.image.startsWith('http') ? amenity.image : getLocationAssetUrl(amenity.image);
-    }
-    if (amenity.iconImage && typeof amenity.iconImage === 'string' && amenity.iconImage.trim()) {
-      return amenity.iconImage.startsWith('http') ? amenity.iconImage : getLocationAssetUrl(amenity.iconImage);
-    }
-    if (amenity.image_url && typeof amenity.image_url === 'string' && amenity.image_url.trim()) {
-      return amenity.image_url;
-    }
-    return 'https://cms.slnmplapp.com/core/public/uploads/amenities/1790236515_grand-entrance-arch.png';
-  };
-
-  const getAmenityIcon = (title: string, category?: string) => {
-    const t = `${title} ${category || ''}`.toLowerCase();
-    if (t.includes('wifi') || t.includes('internet')) return <WifiIcon sx={{ color: '#0284c7', fontSize: 22 }} />;
-    if (t.includes('power') || t.includes('electric')) return <BoltIcon sx={{ color: '#d97706', fontSize: 22 }} />;
-    if (t.includes('pool') || t.includes('swim')) return <PoolIcon sx={{ color: '#06b6d4', fontSize: 22 }} />;
-    if (t.includes('pipe') || t.includes('sewage') || t.includes('drain')) return <WaterDropIcon sx={{ color: '#0284c7', fontSize: 22 }} />;
-    if (t.includes('fire') || t.includes('safety')) return <LocalFireDepartmentIcon sx={{ color: '#e11d48', fontSize: 22 }} />;
-    if (t.includes('arch') || t.includes('entrance')) return <CastleIcon sx={{ color: theme.palette.primary.main, fontSize: 22 }} />;
-    if (t.includes('security') || t.includes('wall')) return <SecurityIcon sx={{ color: theme.palette.primary.main, fontSize: 22 }} />;
-    if (t.includes('tree') || t.includes('green')) return <ParkIcon sx={{ color: theme.palette.primary.main, fontSize: 22 }} />;
-    return <AutoAwesomeIcon sx={{ color: theme.palette.primary.main, fontSize: 22 }} />;
-  };
-
-  const filteredAmenities = activeCategory === 'ALL'
-    ? amenities
-    : amenities.filter((a) => (a.category || 'General').toUpperCase() === activeCategory);
+    return [
+      { id: 1, title: 'GRAND ENTRANCE ARCH', category: 'Architecture' },
+      { id: 2, title: 'UNDERGROUND ELECTRICITY CONNECTION', category: 'Utilities' },
+      { id: 3, title: 'AVENUE PLANTATION', category: 'Landscape' },
+      { id: 4, title: 'STREET LIGHTS', category: 'Utilities' },
+      { id: 5, title: 'CHILDREN PARK', category: 'Recreation' },
+      { id: 6, title: 'DUPLEX VILLA', category: 'Architecture' },
+      { id: 7, title: 'WATER SUPPLY TO EACH PLOT', category: 'Utilities' },
+      { id: 8, title: 'COMPOUND WALL', category: 'Security' },
+      { id: 9, title: '24/7 SECURITY', category: 'Security' },
+      { id: 10, title: 'OVERHEAD WATER TANK', category: 'Utilities' },
+      { id: 11, title: 'UNDERGROUND DRAINAGE', category: 'Utilities' },
+      { id: 12, title: 'ENTIRE LAYOUT AS PER VASTU', category: 'Planning' },
+      { id: 13, title: 'CLEAR TITLE & SPOT REGISTRATION', category: 'Legal' },
+      { id: 14, title: 'SOLAR FENCING ENTIRE LAYOUT', category: 'Security' },
+      { id: 15, title: 'WATER SUPPLY TO EACH PLOT', category: 'Utilities' },
+    ];
+  }, [venture.amenities]);
 
   return (
     <Box
       id="amenities"
       component="section"
       sx={{
-        py: { xs: 10, md: 14 },
-        bgcolor: '#fafaf9',
+        py: { xs: 8, sm: 10, md: 12 },
+        bgcolor: '#FFFFFF',
+        borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
         position: 'relative',
-        overflow: 'hidden',
-        borderBottom: '1px solid rgba(226, 232, 240, 0.9)',
       }}
     >
-      {/* Ambient background soft glow */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '5%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '800px',
-          height: '400px',
-          borderRadius: '50%',
-          background: `radial-gradient(ellipse, ${alpha(theme.palette.primary.main, 0.04)} 0%, transparent 70%)`,
-          filter: 'blur(80px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      <Container sx={{ position: 'relative', zIndex: 1 }}>
-        {/* Header */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', lg: 'row' },
-            alignItems: { lg: 'flex-end' },
-            justifyContent: 'space-between',
-            gap: 3,
-            pb: 4,
-            borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
-            mb: 4,
-          }}
-        >
-          <Box sx={{ maxWidth: 740 }}>
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 1.25,
-                px: 2,
-                py: 0.75,
-                borderRadius: '9999px',
-                bgcolor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid rgba(226, 232, 240, 0.9)',
-                mb: 2,
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.02)',
-              }}
-            >
-              <Box
-                sx={{
-                  width: 7,
-                  height: 7,
-                  borderRadius: '50%',
-                  bgcolor: theme.palette.primary.main,
-                  boxShadow: `0 0 10px ${theme.palette.primary.main}`,
-                }}
-              />
-              <Typography
-                variant="caption"
-                sx={{
-                  fontFamily: 'Roboto Mono, monospace',
-                  fontSize: '0.725rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  color: '#334155',
-                }}
-              >
-                Engineered Infrastructure
-              </Typography>
-            </Box>
-
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { xs: '1.95rem', sm: '2.65rem', lg: '3.15rem' },
-                fontWeight: 900,
-                letterSpacing: '-0.03em',
-                color: '#0f172a',
-                lineHeight: 1.14,
-              }}
-            >
-              Master Plan Infrastructure & Amenities
-            </Typography>
-
-            <Typography
-              variant="body1"
-              sx={{
-                color: '#64748b',
-                fontSize: { xs: '0.95rem', sm: '1.025rem' },
-                mt: 1.5,
-                lineHeight: 1.65,
-              }}
-            >
-              Every detail is conceived for generational longevity, underground utility reliability, and seamless community living.
-            </Typography>
-          </Box>
-
-          <Box
+      <Container maxWidth={false} sx={{ maxWidth: 1320, px: { xs: 2.5, sm: 3, md: 4 } }}>
+        {/* ===================== CENTERED HEADER (MATCHING REFERENCE) ===================== */}
+        <Box sx={{ textAlign: 'center', mb: { xs: 5, sm: 6, md: 8 } }}>
+          <Typography
+            variant="h2"
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 1,
-              px: 2,
-              py: 1,
-              borderRadius: '10px',
-              bgcolor: '#ffffff',
-              border: '1px solid rgba(203, 213, 225, 0.8)',
-              alignSelf: { xs: 'flex-start', lg: 'flex-end' },
-              boxShadow: '0 2px 6px -1px rgba(0, 0, 0, 0.04)',
+              fontFamily: '"Playfair Display", "Cinzel", "Outfit", "Inter", sans-serif',
+              fontWeight: 900,
+              fontSize: { xs: '1.65rem', sm: '2.15rem', md: '2.65rem' },
+              letterSpacing: '-0.01em',
+              color: '#8B1D2C', // Deep rich crimson/burgundy tone matching client reference
+              lineHeight: 1.25,
+              textTransform: 'uppercase',
+              mb: 1.75,
             }}
           >
-            <CheckCircleIcon sx={{ fontSize: 16, color: theme.palette.primary.main }} />
-            <Typography
-              variant="caption"
-              sx={{
-                fontFamily: 'Roboto Mono, monospace',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                color: '#334155',
-              }}
-            >
-              {filteredAmenities.length} of {amenities.length} Verified Amenities
-            </Typography>
-          </Box>
+            {sectionTitle}
+          </Typography>
+
+          <Typography
+            variant="body1"
+            sx={{
+              fontFamily: 'inherit',
+              color: '#475569',
+              fontSize: { xs: '0.875rem', sm: '0.975rem' },
+              lineHeight: 1.65,
+              maxWidth: 880,
+              mx: 'auto',
+              fontWeight: 400,
+            }}
+          >
+            {sectionSubtitle}
+          </Typography>
         </Box>
 
-        {/* Modern Segmented Category Filters */}
+        {/* ===================== 4-COLUMN AMENITIES GRID ===================== */}
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            overflowX: 'auto',
-            pb: 2,
-            mb: 4,
-            '::-webkit-scrollbar': { height: 4 },
-            '::-webkit-scrollbar-thumb': { bgcolor: 'rgba(203, 213, 225, 0.6)', borderRadius: 2 },
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'repeat(2, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(4, 1fr)',
+              lg: 'repeat(4, 1fr)',
+            },
+            columnGap: { xs: 2.5, sm: 3.5, md: 5, lg: 6 },
+            rowGap: { xs: 4.5, sm: 5.5, md: 6, lg: 7 },
+            justifyContent: 'center',
+            alignItems: 'start',
+            maxWidth: 1200,
+            mx: 'auto',
           }}
         >
-          {categories.map((cat) => {
-            const count = cat === 'ALL'
-              ? amenities.length
-              : amenities.filter((a) => (a.category || 'General').toUpperCase() === cat).length;
-            const isSelected = activeCategory === cat;
-
-            return (
-              <Box
-                key={cat}
-                component="button"
-                onClick={() => setActiveCategory(cat)}
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 1,
-                  px: 2.25,
-                  py: 1.1,
-                  borderRadius: '12px',
-                  bgcolor: isSelected ? '#0f172a' : '#ffffff',
-                  color: isSelected ? '#ffffff' : '#475569',
-                  border: isSelected ? '1.5px solid #0f172a' : '1.5px solid rgba(226, 232, 240, 0.95)',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                  boxShadow: isSelected
-                    ? '0 6px 16px -2px rgba(15, 23, 42, 0.2)'
-                    : '0 2px 4px rgba(0, 0, 0, 0.02)',
-                  whiteSpace: 'nowrap',
-                  '&:hover': {
-                    bgcolor: isSelected ? '#1e293b' : '#f8fafc',
-                    borderColor: isSelected ? '#1e293b' : theme.palette.primary.light,
-                    transform: 'translateY(-1px)',
+          {amenitiesList.map((item, idx) => (
+            <Box
+              key={item.id || idx}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                '&:hover': {
+                  transform: 'translateY(-6px)',
+                  '& .amenity-graphic': {
+                    transform: 'scale(1.08)',
+                    filter: 'drop-shadow(0 12px 20px rgba(0, 0, 0, 0.12))',
                   },
+                  '& .amenity-title': {
+                    color: '#0f172a',
+                  },
+                },
+              }}
+            >
+              {/* Graphic Icon / Image Container */}
+              <Box
+                className="amenity-graphic"
+                sx={{
+                  width: { xs: 80, sm: 95, md: 105, lg: 115 },
+                  height: { xs: 80, sm: 95, md: 105, lg: 115 },
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  filter: 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05))',
+                  p: { xs: 1, sm: 1.25 },
+                  borderRadius: '16px',
+                  bgcolor: 'rgba(248, 250, 252, 0.6)',
+                  border: '1px solid rgba(226, 232, 240, 0.7)',
                 }}
               >
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: 'Roboto Mono, monospace',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  {cat === 'ALL' ? 'All Amenities' : cat}
-                </Typography>
-                <Box
-                  sx={{
-                    px: 0.8,
-                    py: 0.15,
-                    borderRadius: '6px',
-                    bgcolor: isSelected ? 'rgba(255, 255, 255, 0.2)' : 'rgba(241, 245, 249, 0.9)',
-                    color: isSelected ? '#ffffff' : '#64748b',
-                    fontSize: '0.675rem',
-                    fontWeight: 700,
-                    fontFamily: 'Roboto Mono, monospace',
-                  }}
-                >
-                  {count}
-                </Box>
-              </Box>
-            );
-          })}
-        </Box>
-
-        {/* Amenities Cards Grid - Ultra-Modern Architectural Cards */}
-        <Grid container spacing={3.5}>
-          {filteredAmenities.map((amenity, idx) => {
-            const imageUrl = getAmenityImage(amenity);
-            const icon = getAmenityIcon(amenity.title, amenity.category);
-            const numStr = String(idx + 1).padStart(2, '0');
-
-            return (
-              <Grid key={amenity.id || idx} size={{ xs: 12, sm: 6, md: 4 }}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    borderRadius: '18px',
-                    overflow: 'hidden',
-                    bgcolor: '#ffffff',
-                    border: '1.5px solid rgba(226, 232, 240, 0.95)',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                    boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.04)',
-                    willChange: 'transform, box-shadow',
-                    '&:hover': {
-                      borderColor: theme.palette.primary.main,
-                      boxShadow: '0 22px 38px -8px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.04)',
-                      transform: 'translateY(-6px)',
-                      '& img': {
-                        transform: 'scale(1.08)',
-                      },
-                      '& .amenity-title': {
-                        color: theme.palette.primary.main,
-                      },
-                      '& .amenity-icon-dock': {
-                        transform: 'translateY(-2px) scale(1.06)',
-                        boxShadow: `0 8px 16px -2px ${alpha(theme.palette.primary.main, 0.25)}`,
-                      },
-                      '& .amenity-action-arrow': {
-                        transform: 'translateX(4px)',
-                        color: theme.palette.primary.main,
-                      },
-                    },
-                  }}
-                >
-                  {/* Media Container with Frosted Badges */}
+                {item.image || item.iconImage ? (
                   <Box
+                    component="img"
+                    src={item.image || item.iconImage}
+                    alt={item.title}
                     sx={{
-                      position: 'relative',
                       width: '100%',
-                      aspectRatio: '16 / 10',
-                      bgcolor: '#0f172a',
-                      overflow: 'hidden',
+                      height: '100%',
+                      objectFit: 'contain',
+                      display: 'block',
+                      borderRadius: '10px',
                     }}
-                  >
-                    <Box
-                      component="img"
-                      src={imageUrl}
-                      alt={amenity.title}
-                      loading="lazy"
-                      onError={(e: any) => {
-                        e.target.src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80';
-                      }}
-                      sx={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-                      }}
-                    />
+                  />
+                ) : (
+                  renderAmenitySvg(item.title, item.category)
+                )}
+              </Box>
 
-                    {/* Gradient Overlay */}
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: 'linear-gradient(to top, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.1) 50%, rgba(15, 23, 42, 0.4) 100%)',
-                      }}
-                    />
-
-                    {/* Top Row: Category Chip & Index Badge */}
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: 14,
-                        left: 14,
-                        right: 14,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        zIndex: 2,
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: '8px',
-                          bgcolor: 'rgba(15, 23, 42, 0.75)',
-                          backdropFilter: 'blur(10px)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          color: '#ffffff',
-                          fontFamily: 'Roboto Mono, monospace',
-                          fontWeight: 700,
-                          fontSize: '0.675rem',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                        }}
-                      >
-                        {amenity.category || 'General'}
-                      </Box>
-
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          fontFamily: 'Roboto Mono, monospace',
-                          fontWeight: 800,
-                          fontSize: '0.775rem',
-                          color: 'rgba(255, 255, 255, 0.8)',
-                          textShadow: '0 1px 3px rgba(0,0,0,0.5)',
-                        }}
-                      >
-                        {numStr}
-                      </Typography>
-                    </Box>
-
-                    {/* Floating Frosted Icon Dock */}
-                    <Box
-                      className="amenity-icon-dock"
-                      sx={{
-                        position: 'absolute',
-                        bottom: 14,
-                        left: 14,
-                        width: 44,
-                        height: 44,
-                        borderRadius: '12px',
-                        bgcolor: 'rgba(255, 255, 255, 0.95)',
-                        backdropFilter: 'blur(16px)',
-                        border: '1px solid rgba(255, 255, 255, 0.8)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 8px 16px -2px rgba(0, 0, 0, 0.15)',
-                        transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                        zIndex: 2,
-                      }}
-                    >
-                      {icon}
-                    </Box>
-                  </Box>
-
-                  {/* Card Body */}
-                  <Box
-                    sx={{
-                      p: 3,
-                      flexGrow: 1,
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <Typography
-                      className="amenity-title"
-                      variant="h6"
-                      sx={{
-                        fontWeight: 800,
-                        fontSize: '1.15rem',
-                        color: '#0f172a',
-                        mb: 1.25,
-                        lineHeight: 1.3,
-                        transition: 'color 0.25s ease',
-                      }}
-                    >
-                      {amenity.title}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: '#64748b',
-                        fontSize: '0.875rem',
-                        lineHeight: 1.6,
-                        flexGrow: 1,
-                        mb: 2.5,
-                      }}
-                    >
-                      {amenity.desc || 'High-specification development amenity adhering to supreme master planning protocols.'}
-                    </Typography>
-
-                    {/* Bottom Status / Spec Guarantee Bar */}
-                    <Box
-                      sx={{
-                        pt: 2,
-                        borderTop: '1px solid rgba(241, 245, 249, 0.9)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#10b981' }} />
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            fontFamily: 'Roboto Mono, monospace',
-                            fontSize: '0.72rem',
-                            fontWeight: 700,
-                            color: '#475569',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.04em',
-                          }}
-                        >
-                          Verified Infrastructure
-                        </Typography>
-                      </Box>
-
-                      <ArrowForwardIcon
-                        className="amenity-action-arrow"
-                        sx={{
-                          fontSize: 16,
-                          color: '#94a3b8',
-                          transition: 'all 0.3s ease',
-                        }}
-                      />
-                    </Box>
-                  </Box>
-                </Paper>
-              </Grid>
-            );
-          })}
-        </Grid>
+              {/* Bold Uppercase Amenity Title */}
+              <Typography
+                className="amenity-title"
+                sx={{
+                  mt: 2,
+                  fontSize: { xs: '0.78rem', sm: '0.825rem', md: '0.875rem' },
+                  fontWeight: 800,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  color: '#334155',
+                  lineHeight: 1.35,
+                  maxWidth: 200,
+                  transition: 'color 0.2s ease',
+                  userSelect: 'none',
+                }}
+              >
+                {item.title}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
       </Container>
     </Box>
   );

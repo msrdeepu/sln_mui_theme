@@ -1,32 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import {
-  FileText,
-  Download,
-  CheckCircle2,
   MapPin,
-  Sparkles,
-  ShieldCheck,
   Box as BoxIcon,
   Calendar,
   ArrowRight,
-  ExternalLink,
-  Award,
-  Layers,
   Maximize2,
   X,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import type { VentureData } from '../types';
-import { getLocationAssetUrl } from '../siteConfig';
+import { micrositeService } from '../services/micrositeService';
+import { SITE_CONFIG } from '../siteConfig';
 
 interface HeroSectionProps {
   venture: VentureData;
 }
 
 export default function HeroSection({ venture }: HeroSectionProps) {
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [plotStats, setPlotStats] = useState<{ total: number | null; available: number | null }>({
+    total: venture.totalPlotsCount ?? null,
+    available: venture.availablePlotsCount ?? null,
+  });
+
+  // Query live properties from Property model for this venture (Total Plots & Available Plots)
+  useEffect(() => {
+    const vId = venture.ventureId || (venture as any).venture_id || SITE_CONFIG.activeVentureId;
+    if (vId) {
+      micrositeService.fetchPropertyStats(vId).then((res) => {
+        if (res) {
+          setPlotStats({
+            total: res.total_plots,
+            available: res.available_plots,
+          });
+        }
+      });
+    }
+  }, [venture.ventureId]);
 
   // Close lightbox on Escape key
   useEffect(() => {
@@ -41,153 +50,172 @@ export default function HeroSection({ venture }: HeroSectionProps) {
 
   const heroImageSrc = venture.heroBanner;
 
+  // Use custom background cover image if uploaded in admin, fallback to site photo or hero banner
+  const bgCoverImage =
+    venture.heroBgImage ||
+    venture.aboutImage ||
+    venture.heroBanner ||
+    '';
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const getResolvedPdfUrl = (): string => {
-    const rawUrl = venture.brochureUrl;
-    if (rawUrl && rawUrl !== '#' && rawUrl !== '#download-brochure') {
-      if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
-        return rawUrl;
-      }
-      return getLocationAssetUrl(rawUrl);
-    }
-    return 'https://cms.slnmplapp.com/core/public/uploads/venture_pages/brochure/sln-arjun-ventures_1790316373_IuAvac.pdf';
-  };
-
-  // Direct download on click: Zero popups, zero form fields, real API PDF
-  const handleDownload = () => {
-    if (isDownloading) return;
-    setIsDownloading(true);
-
-    try {
-      const pdfUrl = getResolvedPdfUrl();
-      const fileName = venture.brochureFileName || `${venture.title || 'SLN_Ventures'}_Official_Dossier.pdf`;
-
-      const link = document.createElement('a');
-      link.href = pdfUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-
-      setTimeout(() => {
-        if (document.body.contains(link)) {
-          document.body.removeChild(link);
-        }
-      }, 1000);
-
-      confetti({
-        particleCount: 60,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
-
-      setDownloadSuccess(true);
-      setTimeout(() => setDownloadSuccess(false), 3500);
-    } catch (err) {
-      console.error('[HeroSection] Direct download error:', err);
-      const fallbackUrl = 'https://cms.slnmplapp.com/core/public/uploads/venture_pages/brochure/sln-arjun-ventures_1790316373_IuAvac.pdf';
-      window.open(fallbackUrl, '_blank');
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
-  const brochureFileSize = venture.brochureFileSize || 'PDF • 8.4 MB';
-
   return (
     <section
       id="hero"
-      className="relative min-h-[90vh] lg:min-h-screen w-full bg-gradient-to-b from-stone-50 via-slate-50 to-stone-100/90 pt-28 lg:pt-32 pb-16 lg:pb-20 flex flex-col justify-center overflow-hidden antialiased text-slate-900"
+      className="relative min-h-[92vh] lg:min-h-screen w-full pt-28 lg:pt-32 pb-16 lg:pb-20 flex flex-col justify-center overflow-hidden antialiased text-slate-900 bg-[#faf9f5]"
     >
-      {/* Background Architectural Ambient Light & Subtle Pattern */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-emerald-100/40 rounded-full blur-3xl -z-10" />
-        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-amber-100/35 rounded-full blur-3xl -z-10" />
+      {/* ========================================================================= */}
+      {/* BIG COVER IMAGE IN BACKGROUND (DAY THEME WITH SUNLIT LUXURY OVERLAYS)     */}
+      {/* ========================================================================= */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+        <img
+          src={bgCoverImage}
+          alt={`${venture.title} Cover Background`}
+          className="w-full h-full object-cover object-center scale-102 filter brightness-[0.98] contrast-[1.02]"
+          loading="eager"
+        />
+
+        {/* Multi-angle sunlit day gradient overlays: daylight vibrancy with flawless readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#faf9f5]/96 via-[#faf9f5]/88 to-[#faf9f5]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#faf9f5] via-transparent to-[#faf9f5]/60" />
+
+        {/* Ambient atmospheric day glow */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-emerald-100/35 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-amber-100/30 rounded-full blur-3xl" />
+
+        {/* Subtle architectural precision dot grid */}
         <div
-          className="absolute inset-0 opacity-[0.03] -z-10"
+          className="absolute inset-0 opacity-[0.035]"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)`,
+            backgroundImage: 'radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)',
             backgroundSize: '32px 32px',
           }}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
           {/* ========================================================================= */}
-          {/* LEFT COLUMN: Editorial Masthead, Project Identity & Direct CTAs (7 Cols)  */}
+          {/* LEFT COLUMN: Venture Title, Location, Narrative, 3 Specs, Two CTAs (7 Cols)*/}
           {/* ========================================================================= */}
-          <div className="lg:col-span-7 space-y-6 lg:space-y-8">
-            
-            {/* Monumental Architectural Headline */}
+          <div className="lg:col-span-7 space-y-6 lg:space-y-7">
+
+            {/* Monumental Venture Title (Day Theme: Deep Charcoal / Slate 950) */}
             <div>
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-black tracking-tight leading-[1.05] text-slate-950 text-balance">
                 {venture.title}
               </h1>
             </div>
 
-            {/* Narrative & Location Pill strictly from API */}
-            <div className="space-y-3 max-w-2xl">
-              {(venture.subheadline || venture.tagline || (venture.headline && venture.headline !== venture.title ? venture.headline : '')) && (
+            {/* Narrative & Location Pill (Day Theme) */}
+            <div className="space-y-3.5 max-w-2xl">
+              {(venture.subheadline ||
+                venture.tagline ||
+                (venture.headline && venture.headline !== venture.title ? venture.headline : '')) && (
                 <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
                   {venture.subheadline || venture.tagline || venture.headline}
                 </p>
               )}
 
               {venture.location && (
-                <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 bg-white/90 border border-slate-200/80 w-fit px-3.5 py-1.5 rounded-xl shadow-xs">
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-800 bg-white/90 backdrop-blur-md border border-slate-200/90 w-fit px-3.5 py-1.5 rounded-xl shadow-xs">
                   <MapPin className="h-4 w-4 text-emerald-600 shrink-0" />
                   <span>{venture.location}</span>
                 </div>
               )}
             </div>
 
-            {/* Dynamic Metric Specs directly from API */}
-            {Array.isArray(venture.specs) && venture.specs.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 max-w-xl pt-1">
-                {venture.specs.slice(0, 3).map((spec, idx) => (
-                  <div key={idx} className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200/90 shadow-xs">
-                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5 truncate">
-                      {spec.label}
-                    </span>
-                    <span className="text-xl sm:text-2xl font-bold font-serif text-slate-900 block truncate">
-                      {spec.value}
-                    </span>
-                    {spec.sub && (
-                      <span className="text-[10px] text-emerald-600 font-semibold mt-0.5 block truncate">
-                        {spec.sub}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* Dynamic Metric Specs: 3 Cards (Day Theme) */}
+            {/* Box 1: TOTAL ACRES (Entered manually in admin/specs) */}
+            {/* Box 2: TOTAL PLOTS (From Property model / interactive map live query) */}
+            {/* Box 3: AVAILABLE PLOTS (From Property model where status == 'Available') */}
+            {(() => {
+              // 1. Total Acres (Manual Entry from admin specs)
+              const acresSpec = Array.isArray(venture.specs)
+                ? venture.specs.find((s) => /acre/i.test(s.label || '')) || venture.specs[0]
+                : null;
+              const acresVal = acresSpec?.value || '10';
+              const acresLabel = acresSpec?.label && /acre/i.test(acresSpec.label) ? acresSpec.label.toUpperCase() : 'TOTAL ACRES';
+              const acresSub = acresSpec?.sub || 'DTCP & RERA Approved';
 
-            {/* Action Row - Side by Side on Mobile */}
-            <div className="grid grid-cols-2 gap-2.5 sm:flex sm:items-center sm:gap-3.5 pt-2 w-full">
+              // 2. Total Plots (From Property model query)
+              const plotsSpec = Array.isArray(venture.specs)
+                ? venture.specs.find((s) => /plot/i.test(s.label || ''))
+                : null;
+              const totalPlotsVal =
+                plotStats.total != null && plotStats.total > 0
+                  ? String(plotStats.total)
+                  : venture.totalPlotsCount != null && venture.totalPlotsCount > 0
+                  ? String(venture.totalPlotsCount)
+                  : venture.totalPlots || plotsSpec?.value || '131';
+              const totalPlotsLabel = 'TOTAL PLOTS';
+              const totalPlotsSub = plotsSpec?.sub || 'Engineered for Heavy Traffic';
+
+              // 3. Available Plots (From Property model where status == 'Available')
+              const availablePlotsVal =
+                plotStats.available != null
+                  ? String(plotStats.available)
+                  : venture.availablePlotsCount != null
+                  ? String(venture.availablePlotsCount)
+                  : '128';
+              const availablePlotsLabel = 'AVAILABLE PLOTS';
+              const availablePlotsSub = 'East & North Facing Alignments';
+
+              const cards = [
+                { label: acresLabel, value: acresVal, sub: acresSub },
+                { label: totalPlotsLabel, value: totalPlotsVal, sub: totalPlotsSub },
+                { label: availablePlotsLabel, value: availablePlotsVal, sub: availablePlotsSub },
+              ];
+
+              return (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 max-w-xl pt-1">
+                  {cards.map((spec, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-white/92 hover:bg-white backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-slate-200/90 shadow-xs hover:shadow-md transition-all"
+                    >
+                      <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5 truncate">
+                        {spec.label}
+                      </span>
+                      <span className="text-xl sm:text-2xl font-bold font-serif text-slate-900 block truncate">
+                        {spec.value}
+                      </span>
+                      {spec.sub && (
+                        <span className="text-[10px] text-emerald-600 font-semibold mt-0.5 block truncate">
+                          {spec.sub}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
+            {/* Action Row: Two CTAs */}
+            <div className="grid grid-cols-2 gap-2.5 sm:flex sm:items-center sm:gap-4 pt-2 w-full">
+              {/* CTA 1: Explore 3D Master Plan */}
               <button
                 type="button"
                 onClick={() => scrollToSection('master-plan')}
-                className="w-full sm:w-auto px-3 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-sans font-extrabold text-[11.5px] sm:text-xs md:text-sm tracking-wide uppercase shadow-lg shadow-emerald-900/15 hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 group text-center"
+                className="w-full sm:w-auto px-4 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-sans font-extrabold text-[11.5px] sm:text-xs md:text-sm tracking-wide uppercase shadow-lg shadow-emerald-900/15 hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 group text-center"
               >
-                <BoxIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 transition-transform group-hover:scale-110" />
+                <BoxIcon className="h-4 w-4 shrink-0 transition-transform group-hover:scale-110" />
                 <span className="sm:hidden">Explore 3D Plan</span>
                 <span className="hidden sm:inline">Explore 3D Master Plan</span>
-                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 hidden md:inline transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 shrink-0 hidden md:inline transition-transform group-hover:translate-x-1" />
               </button>
 
+              {/* CTA 2: Schedule Site Visit */}
               <button
                 type="button"
                 onClick={() => scrollToSection('contact')}
-                className="w-full sm:w-auto px-3 sm:px-7 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-[11.5px] sm:text-xs md:text-sm border border-slate-300 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 text-center"
+                className="w-full sm:w-auto px-4 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-[11.5px] sm:text-xs md:text-sm border border-slate-300 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 text-center"
               >
-                <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-emerald-600" />
+                <Calendar className="h-4 w-4 shrink-0 text-emerald-600" />
                 <span className="sm:hidden">Site Visit</span>
                 <span className="hidden sm:inline">Schedule Site Visit</span>
               </button>
@@ -195,7 +223,7 @@ export default function HeroSection({ venture }: HeroSectionProps) {
           </div>
 
           {/* ========================================================================= */}
-          {/* RIGHT COLUMN: Official Hero Showcase Banner (5 Cols, 535x690)            */}
+          {/* RIGHT COLUMN: Striking Visual Showcase Banner (5 Cols, 535x690)           */}
           {/* ========================================================================= */}
           <div className="lg:col-span-5 relative flex justify-center">
             {/* Ambient Backlight */}
@@ -210,92 +238,25 @@ export default function HeroSection({ venture }: HeroSectionProps) {
               {heroImageSrc ? (
                 <img
                   src={heroImageSrc}
-                  alt={`${venture.title} Official Showcase`}
+                  alt={`${venture.title} Striking Visual Showcase`}
                   className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-500 ease-out select-none"
                   loading="eager"
                   width={535}
                   height={690}
                 />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-slate-500 gap-2">
-                  <Maximize2 className="w-12 h-12 text-slate-600" />
+                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-400 gap-2">
+                  <Maximize2 className="w-12 h-12 text-slate-400" />
                   <span className="text-xs font-mono">Official Showcase (535 × 690)</span>
                 </div>
               )}
-
-              {/* Slim Floating Full Screen Trigger Pill in Top Corner */}
-              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsPreviewOpen(true);
-                  }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/80 hover:bg-slate-950 text-white text-xs font-medium backdrop-blur-md border border-white/15 shadow-sm transition-all hover:scale-105 cursor-pointer"
-                >
-                  <Maximize2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Full Screen</span>
-                </button>
-              </div>
             </div>
           </div>
 
         </div>
-
-        {/* ========================================================================= */}
-        {/* DEVELOPMENT HALLMARKS (Dynamic from API: venture.aboutChecklist)         */}
-        {/* ========================================================================= */}
-        <div className="pt-10 sm:pt-14 w-full">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl shadow-slate-900/5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold">
-                  <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                  <span>Certified Infrastructure</span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-serif font-black text-slate-950 mt-1">
-                  Development Hallmarks
-                </h3>
-              </div>
-              <span className="text-xs font-mono text-slate-500 bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200/80 w-fit font-semibold">
-                100% Statutory Clearance
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
-              {(Array.isArray(venture.aboutChecklist) && venture.aboutChecklist.length > 0
-                ? venture.aboutChecklist
-                : [
-                    '100% DTCP Approved Layout Certification',
-                    'Concealed Underground Stormwater Drainage',
-                    'Dedicated Central Water Tank & Distribution',
-                    'Pre-approved Mortgages: SBI, HDFC, ICICI',
-                  ]
-              ).map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-4 rounded-2xl bg-slate-50/80 hover:bg-emerald-50/50 border border-slate-200/70 hover:border-emerald-300 transition-all duration-200 flex items-start gap-3.5 group shadow-xs hover:shadow-md"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-emerald-600 shrink-0 group-hover:scale-110 transition-transform">
-                    <CheckCircle2 className="h-5 w-5" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <span className="text-[11px] font-mono font-bold text-emerald-700/80 block tracking-wider">
-                      0{idx + 1}
-                    </span>
-                    <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
-                      {item}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      {/* High-Resolution Dossier / Master Plan Lightbox Modal */}
+      {/* High-Resolution Master Showcase Lightbox Modal */}
       {isPreviewOpen && (
         <div
           role="dialog"

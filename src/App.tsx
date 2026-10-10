@@ -16,6 +16,7 @@ import LocationsSection from './components/LocationsSection';
 import BrochureBanner from './components/BrochureBanner';
 import FaqSection from './components/FaqSection';
 import ContactFormSection from './components/ContactFormSection';
+import DevelopmentHighlightsSection from './components/DevelopmentHighlightsSection';
 import FooterSection from './components/FooterSection';
 import MicrositeSkeleton from './components/MicrositeSkeleton';
 import ElevenLabsWidgets from './components/ElevenLabsWidgets';
@@ -206,6 +207,7 @@ export default function App() {
         <Navbar venture={currentVenture} />
         <Box component="main">
           <HeroSection venture={currentVenture} />
+          <DevelopmentHighlightsSection venture={currentVenture} />
           {(currentVenture.vimeoId || currentVenture.vimeoUrl) && (
             <CinematicVideoSection venture={currentVenture} />
           )}
